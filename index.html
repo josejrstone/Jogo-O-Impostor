@@ -399,9 +399,9 @@
                 </div>
 
             <div id="review-card" style="display:none; flex-direction: column; align-items:center; animation: fadeIn 0.3s;">
-                <div id="review-icon" class="icon-display" style="font-size: 4rem;"></div>
-                <div id="review-role" class="role-text" style="font-size: 1.2rem;"></div>
-                <div id="review-item" style="font-size: 0.9rem; color: #aaa;"></div>
+                <div id="review-role-icon" class="icon-display" style="font-size: 4rem;"></div>
+                <div id="review-role-name" class="role-text" style="font-size: 1.2rem;"></div>
+                <div id="review-item-name" style="font-size: 0.9rem; color: #aaa;"></div>
             </div>
 
             <button class="btn-main btn-hide" onclick="closeReviewModal()" style="margin-top:15px;">FECHAR</button>
@@ -422,8 +422,11 @@
             { c: {i: 'fa-futbol', n: 'Futebol'}, i: {i: 'fa-basketball', n: 'Basquete'} },
             { c: {i: 'fa-mobile', n: 'Celular'}, i: {i: 'fa-tablet', n: 'Tablet'} },
             { c: {i: 'fa-mug-hot', n: 'Café'}, i: {i: 'fa-wine-glass', n: 'Vinho'} },
-            { c: {i: 'fa-ghost', n: 'Fantasma'}, i: {i: 'fa-skull', n: 'Caveira'} }
-            // Adicione mais 90 pares aqui para chegar a 100 opções...
+            { c: {i: 'fa-ghost', n: 'Fantasma'}, i: {i: 'fa-skull', n: 'Caveira'} },
+            { c: {i: 'fa-gamepad', n: 'Videogame'}, i: {i: 'fa-dice', n: 'Dados'} },
+            { c: {i: 'fa-book', n: 'Livro'}, i: {i: 'fa-newspaper', n: 'Jornal'} },
+            { c: {i: 'fa-bicycle', n: 'Bicicleta'}, i: {i: 'fa-motorcycle', n: 'Moto'} },
+            { c: {i: 'fa-plane', n: 'Avião'}, i: {i: 'fa-helicopter', n: 'Helicóptero'} }
         ];
 
         let state = {
@@ -580,7 +583,11 @@
             document.getElementById('view-revealed').style.display = 'none';
         }
 
+        // Função Genérica para mostrar a carta (usada no jogo e no modal)
         function renderCardData(player, prefix="") {
+            // Se prefix for vazio, busca IDs: role-icon, role-name, item-name
+            // Se prefix for 'review-', busca IDs: review-role-icon, review-role-name, review-item-name
+            
             const icon = document.getElementById(prefix + 'role-icon');
             const name = document.getElementById(prefix + 'role-name');
             const item = document.getElementById(prefix + 'item-name');
@@ -599,7 +606,7 @@
 
         function revealCard() {
             const player = state.players[state.currentPlayerIndex];
-            renderCardData(player);
+            renderCardData(player); // Prefixo vazio
             document.getElementById('view-hidden').style.display = 'none';
             document.getElementById('view-revealed').style.display = 'flex';
         }
@@ -623,7 +630,7 @@
             switchScreen('screen-setup');
         }
 
-        // Feature 4: Prova Real (Histórico)
+        // Feature 4: Prova Real (Histórico corrigido para Português)
         function toggleHistory() {
             const box = document.getElementById('history-box');
             if (box.style.display === 'block') {
@@ -631,9 +638,15 @@
                 return;
             }
             
+            const roleTranslations = {
+                'civilian': 'CIVIL',
+                'impostor': 'IMPOSTOR',
+                'detective': 'DETETIVE'
+            };
+
             let html = '<h4 style="margin-bottom:10px; color:var(--accent)">Revelação de Identidade:</h4>';
             state.players.forEach(p => {
-                let roleLabel = p.realRole.toUpperCase();
+                let roleLabel = roleTranslations[p.realRole] || p.realRole;
                 let color = '#fff';
                 if(p.realRole === 'impostor') color = 'var(--secondary)';
                 if(p.realRole === 'detective') color = '#FFA500';
@@ -649,7 +662,7 @@
             box.style.display = 'block';
         }
 
-        // Feature 5: Espiar (Modal)
+        // Feature 5: Espiar (Modal Corrigido)
         function openReviewModal() {
             const grid = document.getElementById('review-grid');
             grid.innerHTML = '';
@@ -671,14 +684,14 @@
             const player = state.players[idx];
             document.getElementById('review-grid').style.display = 'none';
             
-            renderCardData(player, 'review-'); // Reutiliza lógica visual com prefixo para IDs do modal
+            // Aqui enviamos o prefixo 'review-' para preencher os IDs do Modal
+            renderCardData(player, 'review-'); 
             
             document.getElementById('review-card').style.display = 'flex';
         }
 
         function closeReviewModal() {
             document.getElementById('review-modal').style.display = 'none';
-            // Reseta estado interno do modal
             document.getElementById('review-card').style.display = 'none';
             document.getElementById('review-grid').style.display = 'grid';
         }
