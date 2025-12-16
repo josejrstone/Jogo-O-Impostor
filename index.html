@@ -1,2739 +1,704 @@
-<html><head><base href="." />
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Oferta Stone - BETA</title>
-<style>
-:root {
-    --stone-green: #00A868;
-    --stone-dark: #008653;
-    --stone-light: #E8F7F2;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 100px 20px 200px; /* Increased bottom padding from 20px to 200px */
-    background-color: var(--stone-light);
-}
-
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
-.top-header {
-    background-color: var(--stone-green);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 2000;
-    transition: height 0.3s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    height: 80px;
-}
-
-.top-header.scrolled {
-    height: 60px;
-}
-
-.top-header h1 {
-    color: white;
-    margin: 0;
-    font-size: 24px;
-    transition: font-size 0.3s ease;
-}
-
-.top-header.scrolled h1 {
-    font-size: 20px;
-}
-
-.menu-button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 10px;
-}
-
-.section-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px; /* Added margin bottom for better spacing */
-    cursor: pointer; /* Show pointer cursor on hover */
-}
-
-.add-tab-button {
-    background-color: var(--stone-green);
-    color: white;
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-}
-
-.add-tab-button:hover {
-    background-color: var(--stone-dark);
-}
-
-.add-tab-button.hidden {
-    display: none;
-}
-
-.delete-tab-button {
-    background-color: #dc3545;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
-    padding: 0;
-    display: none; /* Hidden by default */
-    align-items: center;
-    justify-content: center;
-    margin-left: 5px;
-    transition: background-color 0.2s ease;
-}
-
-.delete-tab-button:hover {
-    background-color: #bd2130;
-}
-
-.delete-tab-button.visible {
-    display: flex;
-}
-
-.tab-header {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Changed from flex to grid */
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 30px; /* Added margin bottom to create space */
-}
-
-.tab {
-    width: 100%; /* Ensure tab fills grid cell */
-    text-align: center; /* Center text in tab */
-    padding: 10px 5px; /* Adjust padding to be more compact */
-    background-color: white;
-    color: var(--stone-green);
-    border: none;
-    border-radius: 5px 5px 0 0;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.tab:hover {
-    background-color: var(--stone-light);
-}
-
-.tab.active {
-    color: var(--stone-green);
-}
-
-.tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -5px; /* Adjusted from -10px to -5px to keep indicator line closer */
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--stone-green);
-}
-
-h1 {
-    color: var(--stone-green);
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    margin-bottom: 20px;
-}
-
-.input-group {
-    margin-bottom: 5px;
-}
-
-label {
-    display: block;
-    color: var(--stone-dark);
-    margin-bottom: 8px;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-input[type="number"],
-.currency-input,
-.percentage-input {
-    width: calc(100% - 24px);
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.2s ease;
-}
-
-input[type="number"]:focus,
-.currency-input:focus,
-.percentage-input:focus {
-    outline: none;
-    border-color: var(--stone-green);
-    box-shadow: 0 0 0 2px rgba(0, 168, 104, 0.1);
-}
-
-.button {
-    background-color: var(--stone-green);
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    width: 100%;
-    margin-top: 10px;
-    transition: background-color 0.2s ease;
-}
-
-.button:hover {
-    background-color: var(--stone-dark);
-}
-
-.cet-container {
-    display: none;
-    margin-top: 20px;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-}
-
-.cet-container.active {
-    display: grid;
-}
-
-.floating-button {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--stone-green);
-    color: white;
-    padding: 15px 25px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    z-index: 1999; /* Updated z-index */
-}
-
-.floating-button:hover {
-    background-color: var(--stone-dark);
-    transform: translateX(-50%) translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Add media query for mobile screens */
-@media screen and (max-width: 768px) {
-    .floating-button {
-        left: 20px;
-        right: 20px;
-        width: calc(100% - 40px);
-        transform: none;
-    }
-
-    .floating-button:hover {
-        transform: translateY(-2px);
-    }
-}
-
-/* Update the grid layout in the checkbox container styles */
-.container > div:has(.checkbox-container) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr) !important; /* Force two columns */
-}
-
-/* Add these styles for the checkboxes */
-.checkbox-container {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: var(--stone-light);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.checkbox-container:hover {
-    background-color: #daf0e9;
-}
-
-.checkbox-container input[type="checkbox"] {
-    margin-right: 10px;
-    width: 18px;
-    height: 18px;
-    accent-color: var(--stone-green);
-    cursor: pointer;
-}
-
-.checkbox-label {
-    color: var(--stone-dark);
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.tab.hidden {
-    display: none;
-}
-
-.percentage-input {
-    width: calc(100% - 24px);
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.2s ease;
-}
-
-.percentage-input:focus {
-    outline: none;
-    border-color: var(--stone-green);
-    box-shadow: 0 0 0 2px rgba(0, 168, 104, 0.1);
-}
-
-.comparison-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px auto; /* Center the table */
-}
-
-.comparison-table th, 
-.comparison-table td {
-    padding: 12px;
-    text-align: center; /* Center all table content */
-    border-bottom: 1px solid #ddd;
-}
-
-.comparison-table th {
-    background-color: var(--stone-light);
-    color: var(--stone-dark);
-    font-weight: bold;
-    text-align: center; /* Center header text */
-}
-
-.comparison-result {
-    margin-bottom: 30px; /* Add space between comparisons */
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    text-align: center; /* Center content in Resultado Detalhado */
-}
-
-.comparison-result h2 {
-    color: black;
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.savings {
-    color: #28a745;
-    font-weight: bold;
-}
-
-.loss {
-    color: #FF8C00; /* Changed from red to orange */
-}
-
-/* Add styles for the total summary */
-.comparison-result:last-child {
-    margin-top: 20px;
-    border-top: 2px solid var(--stone-green);
-    padding-top: 20px;
-}
-
-/* Add these styles to handle visibility */
-#resultadoDetalhadoContainer {
-    display: none; /* Initially hidden */
-}
-
-#resultadoDetalhadoContainer.has-results {
-    display: block; /* Show when has results */
-}
-
-/* Add these styles to highlight the summary values */
-.highlight-value {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-#resultadoTotalContent .comparison-result {
-    margin-bottom: 30px;
-    padding: 25px;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-#resultadoTotalContent .comparison-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-}
-
-#resultadoTotalContent .comparison-table th,
-#resultadoTotalContent .comparison-table td {
-    padding: 15px;
-    text-align: center;
-}
-
-#resultadoTotalContent .highlight-value {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #FF8C00;
-}
-
-#resultadoTotalContent .comparison-table th.highlight {
-    font-size: 1.2em;
-    color: var(--stone-dark);
-    background-color: var(--stone-light);
-}
-
-#resultadoTotalContent h2 {
-    color: var(--stone-dark);
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.3em;
-}
-
-/* Update the style for the comparison message */
-.comparison-result p {
-    margin-top: 15px;
-    color: #666;
-    font-style: italic;
-    text-align: center;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px dashed #ddd;
-    font-size: 1.1em;
-}
-
-.comparison-result p emoji {
-    font-size: 1.5em;
-    margin-right: 5px;
-}
-
-/* Prevent text selection on double-click */
-.tab {
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-/* Add these styles to handle collapsed/expanded state */
-.collapsed-content {
-    display: none;
-}
-
-.expanded-content {
-    display: block;
-}
-
-/* Add cursor pointer to indicate clickable header */
-#resultadoDetalhadoContainer .section-header {
-    cursor: pointer;
-}
-
-/* Add these styles in the existing <style> section */
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2001;
-    display: none;
-}
-
-.side-menu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px;
-    height: 100vh;
-    background-color: white;
-    z-index: 2002;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-}
-
-.side-menu.open {
-    transform: translateX(0);
-}
-
-.menu-content {
-    padding: 100px 20px 20px;
-}
-
-.menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Add these styles to hide specific menu items */
-.menu-item[data-feature="notes"],
-.menu-item[data-feature="calculator"],
-.menu-item[data-feature="save"],
-.menu-item[data-feature="load"],
-.menu-item[data-feature="share"],
-.menu-item[data-feature="manual"] {
-    display: none;
-}
-
-.menu-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 0;
-    color: var(--stone-green);
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-}
-
-.menu-item:hover {
-    opacity: 0.7;
-}
-
-.menu-item i {
-    margin-right: 15px;
-    color: var(--stone-green);
-    width: 20px;
-    text-align: center;
-}
-
-.menu-toggle {
-    position: absolute;
-    left: -30px;
-    top: 80%; /* Change from 50% to 80% to move it closer to bottom */
-    transform: translateY(-50%);
-    width: 30px;
-    height: 60px;
-    background-color: white;
-    border: none;
-    border-radius: 8px 0 0 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-}
-
-.menu-toggle i {
-    color: var(--stone-green);
-    transition: transform 0.3s ease;
-}
-
-.menu-toggle.open i {
-    transform: rotate(180deg);
-}
-
-/* Add these styles for the countdown banner */
-.countdown-banner {
-    position: fixed;
-    bottom: 80px;
-    left: 0;
-    right: 0;
-    background-color: var(--stone-light);
-    padding: 20px;
-    text-align: center;
-    margin: 0 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    display: none;
-    z-index: 1998;
-}
-
-/* Add these styles to handle the minimized countdown banner */
-.countdown-banner.minimized {
-    padding: 10px; /* Reduce padding when minimized */
-    transition: all 0.3s ease; /* Smooth transition for size changes */
-}
-
-.countdown-banner.minimized .countdown-title {
-    font-size: 0.9em;
-    margin-bottom: 5px;
-}
-
-.countdown-banner.minimized .countdown-timer {
-    gap: 10px;
-    margin-bottom: 5px;
-}
-
-.countdown-banner.minimized .countdown-value {
-    font-size: 1em;
-    min-width: 30px;
-}
-
-.countdown-banner.minimized .countdown-label {
-    font-size: 0.3em;
-}
-
-.countdown-banner.minimized .countdown-note {
-    font-size: 0.8em;
-    margin-top: 5px;
-}
-
-/* Add user-select none to prevent text selection on double click */
-.countdown-banner {
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: pointer;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 3000;
-}
-
-.modal {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.modal-title {
-    color: var(--stone-green);
-    margin: 0 0 20px 0;
-    text-align: center;
-    font-size: 20px;
-}
-
-.deadline-options {
-    display: grid;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.deadline-option {
-    padding: 12px;
-    border: 1px solid var(--stone-green);
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: all 0.2s ease;
-}
-
-.deadline-option:hover {
-    background-color: var(--stone-light);
-}
-
-.deadline-option.selected {
-    background-color: var(--stone-green);
-    color: white;
-}
-
-.datetime-picker {
-    display: grid;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.datetime-picker input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.datetime-picker input:focus {
-    outline: none;
-    border-color: var(--stone-green);
-    box-shadow: 0 0 0 2px rgba(0, 168, 104, 0.1);
-}
-
-.modal-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.modal-button {
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s ease;
-}
-
-.modal-button.confirm {
-    background-color: var(--stone-green);
-    color: white;
-}
-
-.modal-button.confirm:hover {
-    background-color: var(--stone-dark);
-}
-
-.modal-button.cancel {
-    background-color: #f8f9fa;
-    color: #666;
-    border: 1px solid #ddd;
-}
-
-.modal-button.cancel:hover {
-    background-color: #e9ecef;
-}
-
-.countdown-banner {
-    background-color: var(--stone-light);
-    padding: 20px;
-    text-align: center;
-    margin-top: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    display: none; /* Hidden by default */
-}
-
-.countdown-title {
-    color: var(--stone-dark);
-    font-size: 1.2em;
-    margin-bottom: 15px;
-}
-
-.countdown-timer {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 15px;
-    font-size: 2em;
-    font-weight: bold;
-    color: var(--stone-green);
-}
-
-.countdown-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.countdown-value {
-    font-size: 1.5em;
-    min-width: 60px;
-}
-
-.countdown-label {
-    font-size: 0.4em;
-    text-transform: uppercase;
-    margin-top: 5px;
-    color: #666;
-}
-
-.countdown-note {
-    color: #dc3545;
-    font-style: italic;
-    font-size: 0.9em;
-    margin-top: 10px;
-}
-
-/* Add this class for urgent countdown (less than 1 hour) */
-.countdown-urgent .countdown-value {
-    color: #dc3545;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-/* Add these styles for the tooltip */
-.tooltip {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    z-index: 3000;
-    max-width: 400px;
-    text-align: center;
-    display: none;
-}
-
-.tooltip-title {
-    color: var(--stone-green);
-    font-size: 18px;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-
-.tooltip-content {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.tooltip-close {
-    background-color: var(--stone-green);
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.tooltip-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 2999;
-    display: none;
-}
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encontre o Impostor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #FF6584;
+            --accent: #42EADD;
+            --bg: #1a1a2e;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none; /* Previne seleção de texto para não dar spoiler */
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 10% 20%, rgba(108, 99, 255, 0.2) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(255, 101, 132, 0.2) 0%, transparent 20%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        /* --- Controles do Formulário --- */
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .number-display {
+            background: var(--primary);
+            padding: 2px 8px;
+            border-radius: 5px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .counter-input {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-counter {
+            background: var(--secondary);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-counter:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+
+        /* --- Botões Principais --- */
+        .btn-main {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-reveal {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-hide {
+            background: #444;
+            color: #fff;
+        }
+
+        .btn-main:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Telas do Jogo --- */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Cartão de Revelação --- */
+        .card-reveal-area {
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .player-turn-text {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .icon-display {
+            font-size: 6rem;
+            margin: 20px 0;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+            transition: all 0.3s;
+        }
+
+        .role-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .secret-content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .impostor-color { color: var(--secondary); }
+        .civilian-color { color: var(--accent); }
+        .detective-color { color: #FFA500; }
+
+        .hidden-info {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .validation-msg {
+            color: var(--secondary);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            text-align: right;
+            min-height: 1.2em;
+        }
+
+    </style>
 </head>
 <body>
-<div class="menu-overlay"></div>
-<div class="side-menu">
-    <button class="menu-toggle">
-        <i class="fas fa-chevron-left"></i>
-    </button>
-    <div class="menu-content">
-        <ul class="menu-list">
-            <li class="menu-item">
-                <i class="fas fa-home"></i>
-                Início
-            </li>
-            <li class="menu-item">
-                <i class="fas fa-calendar-alt"></i>
-                Deadline da Oferta
-            </li>
-            <li class="menu-item" data-feature="notes">
-                <i class="fas fa-sticky-note"></i>
-                Bloco de Anotações
-            </li>
-            <li class="menu-item" data-feature="calculator">
-                <i class="fas fa-calculator"></i>
-                Calculadora
-            </li>
-            <li class="menu-item" data-feature="save">
-                <i class="fas fa-save"></i>
-                Salvar Dados
-            </li>
-            <li class="menu-item" data-feature="load">
-                <i class="fas fa-folder-open"></i>
-                Carregar Dados
-            </li>
-            <li class="menu-item" data-feature="share">
-                <i class="fas fa-share-alt"></i>
-                Compartilhar Oferta
-            </li>
-            <li class="menu-item" data-feature="manual">
-                <i class="fas fa-book"></i>
-                Manual de Uso
-            </li>
-        </ul>
-    </div>
-</div>
-<header class="top-header">
-    <h1>Oferta Stone - BETA</h1>
-    <button class="menu-button">☰</button>
-</header>
-<div class="container">
-    <div class="section-header">
-        <h1>Máquina Atual</h1>
-        <div style="display: flex; gap: 5px;">
-            <button class="add-tab-button" id="addMaquinaTab">+</button>
-            <button class="delete-tab-button" id="deleteMaquinaTab">-</button>
-        </div>
-    </div>
-    
-    <div class="tab-header" id="maquinaTabHeader">
-        <button class="tab active">Máquina 1</button>
-        <button class="tab hidden">Máquina 2</button>
-        <button class="tab hidden">Máquina 3</button>
-        <button class="tab hidden">Máquina 4</button>
-        <button class="tab hidden">Máquina 5</button>
-        <button class="tab hidden">Máquina 6</button>
-        <button class="tab hidden">Máquina 7</button>
-        <button class="tab hidden">Máquina 8</button>
-        <button class="tab hidden">Máquina 9</button>
-        <button class="tab hidden">Máquina 10</button>
-    </div>
-    
-    <div class="form-grid">
-        <div class="input-group">
-            <label>Débito</label>
-            <input type="text" inputmode="numeric" id="debito" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito</label>
-            <input type="text" inputmode="numeric" id="credito" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Antecipação</label>
-            <input type="text" inputmode="numeric" id="antecipacao" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>PIX</label>
-            <input type="text" inputmode="numeric" id="pix" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Aluguel</label>
-            <input type="text" inputmode="numeric" id="aluguel" placeholder="R$ 0,00" class="currency-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Máquinas</label>
-            <input type="number" id="maquinas" step="0.01" min="0" placeholder="0">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito 2x a 6x</label>
-            <input type="text" inputmode="numeric" id="credito_2_6" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito 7x a 12x</label>
-            <input type="text" inputmode="numeric" id="credito_7_12" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Outros 1</label>
-            <input type="text" inputmode="numeric" id="outros1" placeholder="R$ 0,00" class="currency-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Outros 2</label>
-            <input type="text" inputmode="numeric" id="outros2" placeholder="R$ 0,00" class="currency-input">
-        </div>
-    </div>
 
-    <button class="button" id="cetButton">Custo Efetivo Total</button>
-
-    <div class="cet-container" id="cetContainer">
-    </div>
-</div>
-
-<div class="container">
-    <div class="section-header">
-        <h1>TPV Mensal</h1>
-        <div style="display: flex; gap: 5px;">
-            <button class="add-tab-button" id="addTpvTab">+</button>
-            <button class="delete-tab-button" id="deleteTpvTab">-</button>
-        </div>
-    </div>
-    
-    <div class="tab-header" id="tpvTabHeader">
-        <button class="tab active">Máquina 1</button>
-        <button class="tab hidden">Máquina 2</button>
-        <button class="tab hidden">Máquina 3</button>
-        <button class="tab hidden">Máquina 4</button>
-        <button class="tab hidden">Máquina 5</button>
-        <button class="tab hidden">Máquina 6</button>
-        <button class="tab hidden">Máquina 7</button>
-        <button class="tab hidden">Máquina 8</button>
-        <button class="tab hidden">Máquina 9</button>
-        <button class="tab hidden">Máquina 10</button>
-    </div>
-    
-    <div class="form-grid">
-        <div class="input-group">
-            <label>Débito</label>
-            <input type="text" inputmode="numeric" id="tpv_debito" placeholder="R$ 0,00" class="currency-input">
-        </div>
+    <div class="container">
         
-        <div class="input-group">
-            <label>Crédito</label>
-            <input type="text" inputmode="numeric" id="tpv_credito" placeholder="R$ 0,00" class="currency-input">
-        </div>
-        
-        <div class="input-group">
-            <label>PIX</label>
-            <input type="text" inputmode="numeric" id="tpv_pix" placeholder="R$ 0,00" class="currency-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito 2x a 6x</label>
-            <input type="text" inputmode="numeric" id="tpv_credito_2_6" placeholder="R$ 0,00" class="currency-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito 7x a 12x</label>
-            <input type="text" inputmode="numeric" id="tpv_credito_7_12" placeholder="R$ 0,00" class="currency-input">
-        </div>
-    </div>
-
-    <button class="button" id="tpvCetButton">Custo Efetivo Total</button>
-
-    <div class="cet-container" id="tpvCetContainer">
-    </div>
-</div>
-
-<div class="container">
-    <div class="section-header">
-        <h1>Oferta Stone</h1>
-        <div style="display: flex; gap: 5px;">
-            <button class="add-tab-button" id="addOfertaTab">+</button>
-            <button class="delete-tab-button" id="deleteOfertaTab">-</button>
-        </div>
-    </div>
-    
-    <div class="tab-header" id="ofertaTabHeader">
-        <button class="tab active">Oferta 1</button>
-        <button class="tab hidden">Oferta 2</button>
-        <button class="tab hidden">Oferta 3</button>
-        <button class="tab hidden">Oferta 4</button>
-        <button class="tab hidden">Oferta 5</button>
-        <button class="tab hidden">Oferta 6</button>
-        <button class="tab hidden">Oferta 7</button>
-        <button class="tab hidden">Oferta 8</button>
-        <button class="tab hidden">Oferta 9</button>
-        <button class="tab hidden">Oferta 10</button>
-    </div>
-    
-    <div class="form-grid">
-        <div class="input-group">
-            <label>Débito</label>
-            <input type="text" inputmode="numeric" id="oferta_debito" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito</label>
-            <input type="text" inputmode="numeric" id="oferta_credito" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Antecipação</label>
-            <input type="text" inputmode="numeric" id="oferta_antecipacao" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>PIX</label>
-            <input type="text" inputmode="numeric" id="oferta_pix" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Aluguel</label>
-            <input type="text" inputmode="numeric" id="oferta_aluguel" placeholder="R$ 0,00" class="currency-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Máquinas</label>
-            <input type="number" id="oferta_maquinas" step="0.01" min="0" placeholder="0">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito 2x a 6x</label>
-            <input type="text" inputmode="numeric" id="oferta_credito_2_6" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Crédito 7x a 12x</label>
-            <input type="text" inputmode="numeric" id="oferta_credito_7_12" placeholder="% 0,00" class="percentage-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Outros 1</label>
-            <input type="text" inputmode="numeric" id="oferta_outros1" placeholder="R$ 0,00" class="currency-input">
-        </div>
-        
-        <div class="input-group">
-            <label>Outros 2</label>
-            <input type="text" inputmode="numeric" id="oferta_outros2" placeholder="R$ 0,00" class="currency-input">
-        </div>
-    </div>
-
-    <button class="button" id="ofertaCetButton">Custo Efetivo Total</button>
-
-    <div class="cet-container" id="ofertaCetContainer">
-    </div>
-</div>
-
-<div class="container">
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-        <label class="checkbox-container">
-            <input type="checkbox" id="credito_mdr">
-            <span class="checkbox-label">Crédito MDR</span>
-        </label>
-        
-        <label class="checkbox-container">
-            <input type="checkbox" id="ipv">
-            <span class="checkbox-label">IPV</span>
-        </label>
-        
-        <label class="checkbox-container">
-            <input type="checkbox" id="raio_x">
-            <span class="checkbox-label">Raio-X</span>
-        </label>
-        
-        <label class="checkbox-container">
-            <input type="checkbox" id="oferta_d1">
-            <span class="checkbox-label">Oferta D1</span>
-        </label>
-        
-        <label class="checkbox-container">
-            <input type="checkbox" id="oferta_d0">
-            <span class="checkbox-label">Oferta D0</span>
-        </label>
-    </div>
-</div>
-
-<div class="container">
-    <div class="input-group" id="oferta_d1_container" style="display: none;">
-        <label>Tarifa D1</label>
-        <input type="text" inputmode="numeric" id="oferta_d1_value" placeholder="% 0,00" class="percentage-input" value="% 0,30">
-    </div>
-    <div class="input-group" id="oferta_d0_container" style="display: none;">
-        <label>Tarifa D0</label>
-        <input type="text" inputmode="numeric" id="oferta_d0_value" placeholder="% 0,00" class="percentage-input" value="% 0,50">
-    </div>
-</div>
-
-<button class="floating-button">Comparar Ofertas</button>
-
-<div class="container">
-    <div class="section-header">
-        <h1>Resultado Total</h1>
-    </div>
-    
-    <div id="resultadoTotalContent">
-    </div>
-</div>
-
-<!-- Modify the Resultado Detalhado container structure -->
-<div id="resultadoDetalhadoContainer" class="container">
-    <div class="section-header">
-        <h1>Resultado Detalhado</h1>
-    </div>
-    <div id="resultadoDetalhado"></div>
-</div>
-
-<div class="modal-overlay" id="deadlineModal">
-    <div class="modal">
-        <h2 class="modal-title">Definir Deadline da Oferta</h2>
-        
-        <div class="datetime-picker">
-            <input type="date" id="deadlineDate">
-            <input type="time" id="deadlineTime">
-        </div>
-        
-        <div class="deadline-options">
-            <div class="deadline-option" data-value="immediate">
-                <span>Imediatamente</span>
+        <div id="screen-setup" class="screen active">
+            <h1><i class="fa-solid fa-user-secret"></i> Configuração</h1>
+            
+            <div class="control-group">
+                <label>Total de Jogadores</label>
+                <div class="slider-container">
+                    <input type="range" id="totalPlayers" min="3" max="30" value="5">
+                    <span class="number-display" id="totalPlayersVal">5</span>
+                </div>
+                <div id="rule-msg" class="validation-msg">Máx. Especiais (Imp+Det): 1</div>
             </div>
-            <div class="deadline-option" data-value="30">
-                <span>30 Segundos</span>
+
+            <div class="switch-container">
+                <label>Modo Caos (Aleatório)</label>
+                <label class="switch">
+                    <input type="checkbox" id="chaosMode">
+                    <span class="slider"></span>
+                </label>
             </div>
-            <div class="deadline-option" data-value="60">
-                <span>1 Minuto</span>
-            </div>
-            <div class="deadline-option" data-value="120">
-                <span>2 Minutos</span>
-            </div>
-        </div>
-        
-        <div class="modal-buttons">
-            <button class="modal-button cancel" id="cancelDeadline">Cancelar</button>
-            <button class="modal-button confirm" id="confirmDeadline">Confirmar</button>
-        </div>
-    </div>
-</div>
 
-<div class="countdown-banner" id="countdownBanner">
-    <div class="countdown-title">Essa Oferta Stone irá expirar em:</div>
-    <div class="countdown-timer" id="countdownTimer">
-        <div class="countdown-section" id="daysSection">
-            <div class="countdown-value" id="days">00</div>
-            <div class="countdown-label">Dias</div>
-        </div>
-        <div class="countdown-section">
-            <div class="countdown-value" id="hours">00</div>
-            <div class="countdown-label">Horas</div>
-        </div>
-        <div class="countdown-section">
-            <div class="countdown-value" id="minutes">00</div>
-            <div class="countdown-label">Minutos</div>
-        </div>
-        <div class="countdown-section">
-            <div class="countdown-value" id="seconds">00</div>
-            <div class="countdown-label">Segundos</div>
-        </div>
-    </div>
-    <div class="countdown-note">
-        Atenção! Você escolheu uma oferta que está quase terminando.
-    </div>
-</div>
-
-<div class="tooltip-overlay"></div>
-<div class="tooltip">
-    <div class="tooltip-title"></div>
-    <div class="tooltip-content"></div>
-    <button class="tooltip-close">Entendi</button>
-</div>
-
-<script>
-function getDailyInvestmentComparison(dailyValue) {
-    if (dailyValue < 0.50) {
-        return "🍬 Essa Oferta Stone equivale apenas ao preço médio de 1 bala doce.";
-    } else if (dailyValue < 1.00) {
-        return "🍬 Essa Oferta Stone equivale ao preço médio de algumas balas doces.";
-    } else if (dailyValue < 3.00) {
-        return "☕ Essa Oferta Stone equivale a apenas 1 cafézinho simples diário em uma padaria.";
-    } else if (dailyValue < 5.00) {
-        return "🧀 Essa Oferta Stone equivale a apenas 1 pão de queijo.";
-    } else if (dailyValue < 10.00) {
-        return "🥤 Essa Oferta Stone equivale a apenas 1 água mineral ou 1 refrigerante por dia.";
-    } else if (dailyValue < 20.00) {
-        return "🥪 Essa Oferta Stone equivale a apenas 1 lanche simples.";
-    } else if (dailyValue < 30.00) {
-        return "🍽️ Essa Oferta Stone equivale a apenas 1 almoço executivo ou um prato feito (PF) por dia.";
-    } else if (dailyValue < 40.00) {
-        return "🥗 Essa Oferta Stone equivale a apenas 1 almoço de balança em um restaurante.";
-    } else if (dailyValue < 50.00) {
-        return "🍕 Essa Oferta Stone equivale a apenas 1 pizza média diária.";
-    } else if (dailyValue < 70.00) {
-        return "📺 Essa Oferta Stone equivale a apenas 1 assinatura mensal de streaming de vídeo ou música diária.";
-    } else if (dailyValue < 100.00) {
-        return "🎡 Essa Oferta Stone equivale a uma ida a um parque de diversões ou museu no dia.";
-    } else {
-        return "🍽️ Essa Oferta Stone equivale a um jantar em um restaurante por dia.";
-    }
-}
-
-// Add this function to check if credit MDR is checked
-function isCreditoMdrChecked() {
-    return document.getElementById('credito_mdr').checked;
-}
-
-function showTooltip(title, content) {
-    const tooltip = document.querySelector('.tooltip');
-    const overlay = document.querySelector('.tooltip-overlay');
-    
-    tooltip.querySelector('.tooltip-title').textContent = title;
-    tooltip.querySelector('.tooltip-content').textContent = content;
-    
-    tooltip.style.display = 'block';
-    overlay.style.display = 'block';
-}
-
-function hideTooltip() {
-    const tooltip = document.querySelector('.tooltip');
-    const overlay = document.querySelector('.tooltip-overlay');
-    
-    tooltip.style.display = 'none';
-    overlay.style.display = 'none';
-}
-
-// Add click handlers for checkboxes
-document.getElementById('credito_mdr').addEventListener('click', function() {
-    if (this.checked) {
-        showTooltip('Crédito MDR',
-            'Ao marcar esta opção, a taxa de antecipação será somada automaticamente à taxa de crédito da Oferta Stone. Isso é útil quando você precisa comparar com uma máquina que já tem a antecipação embutida na taxa de crédito.');
-    }
-});
-
-document.getElementById('ipv').addEventListener('click', function() {
-    if (this.checked) {
-        showTooltip('IPV (Isenção do Pagamento de Valor)',
-            'Ao marcar esta opção, o valor do aluguel será zerado na Oferta Stone. O IPV é um benefício exclusivo que permite a isenção do aluguel da maquininha ao atingir um volume mínimo de vendas mensais.');
-    }
-});
-
-document.getElementById('raio_x').addEventListener('click', function() {
-    if (this.checked) {
-        showTooltip('Raio-X',
-            'Ao marcar esta opção, será incluído o valor mensal de R$ 59,90 na máquina atual, referente ao custo do serviço de relatórios e análises que já está incluso gratuitamente na Oferta Stone.');
-    }
-});
-
-document.getElementById('oferta_d0').addEventListener('click', function() {
-    if (this.checked) {
-        showTooltip('Oferta D0',
-            'Ao marcar esta opção, será adicionada uma taxa extra de 0,50% nas taxas de débito e crédito para recebimento no mesmo dia da venda (D0). Esta taxa pode ser personalizada no campo que aparece abaixo.');
-    }
-});
-
-document.getElementById('oferta_d1').addEventListener('click', function() {
-    if (this.checked) {
-        showTooltip('Oferta D1',
-            'Ao marcar esta opção, será adicionada uma taxa extra de 0,30% nas taxas de débito e crédito para recebimento no dia seguinte à venda (D1). Esta taxa pode ser personalizada no campo que aparece abaixo.');
-    }
-});
-
-// Add click handlers for close button and overlay
-document.querySelector('.tooltip-close').addEventListener('click', hideTooltip);
-document.querySelector('.tooltip-overlay').addEventListener('click', hideTooltip);
-
-document.addEventListener('DOMContentLoaded', function() {
-    const menuButton = document.querySelector('.menu-button');
-    const sideMenu = document.querySelector('.side-menu');
-    const menuOverlay = document.querySelector('.menu-overlay');
-    const menuToggle = document.querySelector('.menu-toggle');
-    const countdownBanner = document.getElementById('countdownBanner');
-
-    countdownBanner.addEventListener('dblclick', function() {
-        this.classList.toggle('minimized');
-        
-        // If minimized, scroll into view to show full banner
-        if (this.classList.contains('minimized')) {
-            this.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
-    });
-
-    function toggleMenu() {
-        sideMenu.classList.toggle('open');
-        menuOverlay.style.display = sideMenu.classList.contains('open') ? 'block' : 'none';
-        menuToggle.classList.toggle('open');
-    }
-
-    menuButton.addEventListener('click', toggleMenu);
-    menuToggle.addEventListener('click', toggleMenu);
-    menuOverlay.addEventListener('click', toggleMenu);
-
-    let maquinaCount = 1;
-    let tpvCount = 1;
-    let ofertaCount = 1;
-
-    // Add these new data structures to store values for each tab
-    const maquinaData = new Array(10).fill().map(() => ({}));
-    const tpvData = new Array(10).fill().map(() => ({}));
-    const ofertaData = new Array(10).fill().map(() => ({}));
-
-    function formatCurrency(value) {
-        if (!value) return '';
-        value = value.replace(/\D/g, '');
-        value = (parseInt(value) / 100).toFixed(2);
-        value = value.replace('.', ',');
-        value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        return `R$ ${value}`;
-    }
-
-    function formatPercentage(value) {
-        if (!value) return '';
-        value = value.replace(/\D/g, '');
-        value = (parseInt(value) / 100).toFixed(2);
-        value = value.replace('.', ',');
-        value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        return `% ${value}`;
-    }
-
-    function handleCurrencyInput(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 2) {
-            value = value.substring(0, value.length - 2) + '.' + value.substring(value.length - 2);
-        } else if (value.length === 2) {
-            value = '0.' + value;
-        } else if (value.length === 1) {
-            value = '0.0' + value;
-        }
-        
-        const formattedValue = formatCurrency(value.replace(/\D/g, ''));
-        e.target.value = formattedValue;
-    }
-
-    function handlePercentageInput(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 2) {
-            value = value.substring(0, value.length - 2) + '.' + value.substring(value.length - 2);
-        } else if (value.length === 2) {
-            value = '0.' + value;
-        } else if (value.length === 1) {
-            value = '0.0' + value;
-        }
-        
-        const formattedValue = formatPercentage(value.replace(/\D/g, ''));
-        e.target.value = formattedValue;
-    }
-
-    function createCetFields(containerId) {
-        const container = document.getElementById(containerId);
-        for(let i = 1; i <= 12; i++) {
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group';
-            
-            const label = document.createElement('label');
-            label.textContent = `${i}x`;
-            
-            const input = document.createElement('input');
-            if (containerId === 'tpvCetContainer') {
-                input.type = 'text';
-                input.inputMode = 'numeric';
-                input.className = 'currency-input';
-                input.placeholder = 'R$ 0,00';
-            } else if (containerId === 'cetContainer') {
-                input.type = 'text';
-                input.inputMode = 'numeric';
-                input.className = 'percentage-input';
-                input.placeholder = '% 0,00';
-            } else if (containerId === 'ofertaCetContainer') {
-                input.type = 'text';
-                input.inputMode = 'numeric';
-                input.className = 'percentage-input';
-                input.placeholder = '% 0,00';
-            } else {
-                input.type = 'number';
-                input.step = '0.01';
-                input.min = '0';
-            }
-            input.id = `${containerId}_${i}x`;
-            
-            inputGroup.appendChild(label);
-            inputGroup.appendChild(input);
-            container.appendChild(inputGroup);
-        }
-    }
-
-    function setupCetButton(buttonId, containerId) {
-        const button = document.getElementById(buttonId);
-        const container = document.getElementById(containerId);
-        
-        button.addEventListener('click', function() {
-            // Calculate CET for Máquina Atual if this is the cetButton
-            if (buttonId === 'cetButton') {
-                const credito2x6x = document.getElementById('credito_2_6').value;
-                const credito7x12x = document.getElementById('credito_7_12').value;
-                const antecipacao = document.getElementById('antecipacao').value;
-                const credito = document.getElementById('credito').value;
-                
-                // Initialize totalMonthlyDifference before the fieldsToCompare loop
-                let totalMonthlyDifference = 0;
-
-                // Calculate 1x if credito and antecipacao have values
-                if (credito && antecipacao) {
-                    const creditoValue = parseFloat(credito.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    const antecipacaoValue = parseFloat(antecipacao.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    
-                    // Calculate 1x: Crédito + ((1-Crédito) * Antecipação)
-                    const cetResult1x = creditoValue + ((1 - creditoValue) * antecipacaoValue);
-                    
-                    // Format and set the result for 1x
-                    document.getElementById(`${containerId}_1x`).value = `% ${(cetResult1x * 100).toFixed(2)}`.replace('.', ',');
-                }
-
-                // Only calculate if antecipacao is present
-                if (antecipacao) {
-                    const antecipacaoValue = parseFloat(antecipacao.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    
-                    // Calculate 2x-6x only if credito2x6x has a value and is not zero
-                    if (credito2x6x && parseFloat(credito2x6x.replace(/[^\d,]/g, '').replace(',', '.')) > 0) {
-                        // Rest of the existing code remains the same...
-                    }
-                }
-            }
-            // Update the ofertaCetButton condition
-            else if (buttonId === 'ofertaCetButton') {
-                const credito = document.getElementById('oferta_credito').value;
-                const credito2x6x = document.getElementById('oferta_credito_2_6').value;
-                const credito7x12x = document.getElementById('oferta_credito_7_12').value;
-                const antecipacao = document.getElementById('oferta_antecipacao').value;
-
-                // Initialize totalMonthlyDifference before the fieldsToCompare loop
-                let totalMonthlyDifference = 0;
-
-                // Calculate 1x if credito and antecipacao have values
-                if (credito && antecipacao) {
-                    const creditoValue = parseFloat(credito.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    const antecipacaoValue = parseFloat(antecipacao.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    
-                    // Calculate 1x: Crédito + ((1-Crédito) * Antecipação)
-                    const cetResult1x = creditoValue + ((1 - creditoValue) * antecipacaoValue);
-                    
-                    // Format and set the result for 1x
-                    document.getElementById(`${containerId}_1x`).value = `% ${(cetResult1x * 100).toFixed(2)}`.replace('.', ',');
-                }
-
-                // Only calculate if both values are present
-                if ((credito2x6x && antecipacao) || (credito7x12x && antecipacao)) {
-                    // Convert percentage strings to numbers
-                    const credito2x6xValue = parseFloat(credito2x6x.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    const credito7x12xValue = parseFloat(credito7x12x.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    const antecipacaoValue = parseFloat(antecipacao.replace(/[^\d,]/g, '').replace(',', '.')) / 100;
-                    
-                    // Calculate 2x-6x
-                    if (credito2x6x) {
-                        // Calculate each installment for 2x-6x using the new formulas
-                        const cetResult2x = 1 - (((100 * (1 - credito2x6xValue)) * (1 - (antecipacaoValue * 1.5))) / 100);
-                        const cetResult3x = 1 - (((100 * (1 - credito2x6xValue)) * (1 - (antecipacaoValue * 2))) / 100);
-                        const cetResult4x = 1 - (((100 * (1 - credito2x6xValue)) * (1 - (antecipacaoValue * 2.5))) / 100);
-                        const cetResult5x = 1 - (((100 * (1 - credito2x6xValue)) * (1 - (antecipacaoValue * 3))) / 100);
-                        const cetResult6x = 1 - (((100 * (1 - credito2x6xValue)) * (1 - (antecipacaoValue * 3.5))) / 100);
-
-                        // Format and set the results
-                        document.getElementById(`${containerId}_2x`).value = `% ${(cetResult2x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_3x`).value = `% ${(cetResult3x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_4x`).value = `% ${(cetResult4x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_5x`).value = `% ${(cetResult5x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_6x`).value = `% ${(cetResult6x * 100).toFixed(2)}`.replace('.', ',');
-                    }
-
-                    // Calculate 7x-12x if credito7x12x has a value
-                    if (credito7x12x) {
-                        // Calculate each installment for 7x-12x using the new formulas
-                        const cetResult7x = 1 - (((100 * (1 - credito7x12xValue)) * (1 - (antecipacaoValue * 4))) / 100);
-                        const cetResult8x = 1 - (((100 * (1 - credito7x12xValue)) * (1 - (antecipacaoValue * 4.5))) / 100);
-                        const cetResult9x = 1 - (((100 * (1 - credito7x12xValue)) * (1 - (antecipacaoValue * 5))) / 100);
-                        const cetResult10x = 1 - (((100 * (1 - credito7x12xValue)) * (1 - (antecipacaoValue * 5.5))) / 100);
-                        const cetResult11x = 1 - (((100 * (1 - credito7x12xValue)) * (1 - (antecipacaoValue * 6))) / 100);
-                        const cetResult12x = 1 - (((100 * (1 - credito7x12xValue)) * (1 - (antecipacaoValue * 6.5))) / 100);
-
-                        // Format and set the results
-                        document.getElementById(`${containerId}_7x`).value = `% ${(cetResult7x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_8x`).value = `% ${(cetResult8x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_9x`).value = `% ${(cetResult9x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_10x`).value = `% ${(cetResult10x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_11x`).value = `% ${(cetResult11x * 100).toFixed(2)}`.replace('.', ',');
-                        document.getElementById(`${containerId}_12x`).value = `% ${(cetResult12x * 100).toFixed(2)}`.replace('.', ',');
-                    }
-                }
-            }
-
-            container.classList.toggle('active');
-            if(container.classList.contains('active')) {
-                button.textContent = 'Ocultar Custo Efetivo Total';
-            } else {
-                button.textContent = 'Custo Efetivo Total';
-            }
-        });
-    }
-
-    function updateAddButton(headerId, buttonId) {
-        const header = document.getElementById(headerId);
-        const addButton = document.getElementById(buttonId);
-        const tabCount = header.querySelectorAll('.tab:not(.hidden)').length;
-        
-        if (tabCount >= 10) {
-            addButton.classList.add('hidden');
-        } else {
-            addButton.classList.remove('hidden');
-        }
-    }
-
-    function updateDeleteButton(headerId, buttonId) {
-        const header = document.getElementById(headerId);
-        const deleteButton = document.getElementById(buttonId);
-        const tabCount = header.querySelectorAll('.tab:not(.hidden)').length;
-        
-        if (tabCount > 1) {
-            deleteButton.classList.add('visible');
-        } else {
-            deleteButton.classList.remove('visible');
-        }
-    }
-
-    function deleteTab(headerId, buttonType) {
-        const header = document.getElementById(headerId);
-        const visibleTabs = header.querySelectorAll('.tab:not(.hidden)');
-        
-        if (visibleTabs.length > 1) {
-            const lastTab = visibleTabs[visibleTabs.length - 1];
-            const previousTab = visibleTabs[visibleTabs.length - 2];
-            const container = header.closest('.container');
-            
-            // If deleting active tab, activate previous tab and load its data
-            if (lastTab.classList.contains('active')) {
-                lastTab.classList.remove('active');
-                previousTab.classList.add('active');
-                
-                // Load data for previous tab based on container type
-                const previousIndex = Array.from(header.querySelectorAll('.tab')).indexOf(previousTab);
-                if (headerId === 'maquinaTabHeader') {
-                    loadTabData(container, previousIndex, maquinaData);
-                } else if (headerId === 'tpvTabHeader') {
-                    loadTabData(container, previousIndex, tpvData);
-                } else if (headerId === 'ofertaTabHeader') {
-                    loadTabData(container, previousIndex, ofertaData);
-                }
-            }
-            
-            // Clear data for the tab being hidden
-            const tabIndex = Array.from(header.querySelectorAll('.tab')).indexOf(lastTab);
-            if (headerId === 'maquinaTabHeader') {
-                maquinaData[tabIndex] = {};
-            } else if (headerId === 'tpvTabHeader') {
-                tpvData[tabIndex] = {};
-            } else if (headerId === 'ofertaTabHeader') {
-                ofertaData[tabIndex] = {};
-            }
-            
-            lastTab.classList.add('hidden');
-            
-            let addButtonId;
-            switch(buttonType) {
-                case 'maquina':
-                    updateDeleteButton(headerId, 'deleteMaquinaTab');
-                    addButtonId = 'addMaquinaTab';
-                    break;
-                case 'tpv':
-                    updateDeleteButton(headerId, 'deleteTpvTab');
-                    addButtonId = 'addTpvTab';
-                    break;
-                case 'oferta':
-                    updateDeleteButton(headerId, 'deleteOfertaTab');
-                    addButtonId = 'addOfertaTab';
-                    break;
-            }
-            updateAddButton(headerId, addButtonId);
-        }
-    }
-
-    function addTab(headerId, buttonType) {
-        const header = document.getElementById(headerId);
-        const hiddenTabs = header.querySelectorAll('.tab.hidden');
-        const visibleTabs = header.querySelectorAll('.tab:not(.hidden)');
-        
-        // Don't add if we already have 10 visible tabs
-        if (visibleTabs.length >= 10) {
-            return;
-        }
-
-        // Show the first hidden tab
-        if (hiddenTabs.length > 0) {
-            hiddenTabs[0].classList.remove('hidden');
-            
-            let deleteButtonId;
-            let addButtonId;
-            
-            switch(buttonType) {
-                case 'maquina':
-                    deleteButtonId = 'deleteMaquinaTab';
-                    addButtonId = 'addMaquinaTab';
-                    break;
-                case 'tpv':
-                    deleteButtonId = 'deleteTpvTab';
-                    addButtonId = 'addTpvTab';
-                    break;
-                case 'oferta':
-                    deleteButtonId = 'deleteOfertaTab';
-                    addButtonId = 'addOfertaTab';
-                    break;
-            }
-
-            updateDeleteButton(headerId, deleteButtonId);
-            updateAddButton(headerId, addButtonId);
-        }
-    }
-
-    // Add this helper function
-    function getTpvValue(tpvData, maquinaIndex, fieldId) {
-        // Try to get value from corresponding tab
-        let tpvValue;
-        
-        if (fieldId.includes('tpvCetContainer_')) {
-            // Handle CET TPV values
-            const cetValue = tpvData[maquinaIndex][fieldId];
-            if (cetValue) {
-                return cetValue;
-            }
-            // If no value found in current tab, use values from tab 1
-            return tpvData[0][fieldId];
-        } else {
-            // Handle regular TPV values
-            tpvValue = tpvData[maquinaIndex][`tpv_${fieldId}`];
-            if (!tpvValue || tpvValue === '') {
-                tpvValue = tpvData[0][`tpv_${fieldId}`];
-            }
-            return tpvValue;
-        }
-    }
-
-    // Add this function to calculate TPV percentage impact
-    function calculateTpvPercentageImpact(tpvData, maquinaIndex, monthlyDifference) {
-        // Get all TPV values
-        const tpvFields = [
-            'debito', 'credito', 'pix', 'credito_2_6', 'credito_7_12'
-        ];
-        
-        let totalTpv = 0;
-        
-        // Sum regular TPV fields
-        for (const field of tpvFields) {
-            const tpvValue = getTpvValue(tpvData, maquinaIndex, field);
-            if (tpvValue) {
-                totalTpv += parseFloat(tpvValue.replace(/[^\d,]/g, '').replace(',', '.'));
-            }
-        }
-        
-        // Sum CET TPV values (1x to 12x)
-        for (let i = 1; i <= 12; i++) {
-            const tpvCet = getTpvValue(tpvData, maquinaIndex, `tpvCetContainer_${i}x`);
-            if (tpvCet) {
-                totalTpv += parseFloat(tpvCet.replace(/[^\d,]/g, '').replace(',', '.'));
-            }
-        }
-        
-        // Calculate percentage if TPV total is greater than 0
-        if (totalTpv > 0) {
-            const percentageImpact = (Math.abs(monthlyDifference) / totalTpv) * 100;
-            return percentageImpact.toFixed(2);
-        }
-        
-        return null;
-    }
-
-    // Add these functions to handle data storage and restoration
-    function saveTabData(container, tabIndex, dataArray) {
-        const inputs = container.querySelectorAll('input');
-        inputs.forEach(input => {
-            dataArray[tabIndex][input.id] = input.value;
-        });
-    }
-
-    function loadTabData(container, tabIndex, dataArray) {
-        const inputs = container.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.value = dataArray[tabIndex][input.id] || '';
-        });
-    }
-
-    function clearInputs(container) {
-        const inputs = container.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.value = '';
-            // Restore placeholders based on input type
-            if (input.classList.contains('currency-input')) {
-                input.placeholder = 'R$ 0,00';
-            } else if (input.classList.contains('percentage-input')) {
-                input.placeholder = '% 0,00';
-            } else if (input.type === 'number') {
-                input.placeholder = '0';
-            }
-        });
-    }
-
-    // Modify the tab click handlers in the DOMContentLoaded event listener
-    document.querySelectorAll('#maquinaTabHeader .tab').forEach((tab, index) => {
-        tab.addEventListener('click', function() {
-            const container = this.closest('.container');
-            const currentActiveTab = container.querySelector('.tab.active');
-            const currentIndex = Array.from(container.querySelectorAll('.tab')).indexOf(currentActiveTab);
-            
-            // Save data from current tab before switching
-            saveTabData(container, currentIndex, maquinaData);
-            
-            // Clear all inputs
-            clearInputs(container);
-            
-            // Remove active class from all tabs
-            container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            
-            // Add active class to clicked tab
-            this.classList.add('active');
-            
-            // Load data for new tab
-            loadTabData(container, index, maquinaData);
-        });
-
-        tab.addEventListener('dblclick', function(e) {
-            e.preventDefault(); // Prevent default double-click behavior
-            
-            // Create a temporary input element
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = this.textContent;
-            input.style.width = '80%';
-            input.style.height = '25px';
-            input.style.border = '1px solid var(--stone-green)';
-            input.style.borderRadius = '4px';
-            input.style.padding = '0 5px';
-            input.style.textAlign = 'center';
-            
-            // Replace tab text with input
-            const oldText = this.textContent;
-            this.textContent = '';
-            this.appendChild(input);
-            input.focus();
-            
-            // Handle input blur and enter key
-            const handleChange = () => {
-                const newName = input.value.trim() || oldText;
-                this.textContent = newName;
-                
-                // Update any existing comparison results
-                const comparisons = document.querySelectorAll('.comparison-result h2');
-                comparisons.forEach(h2 => {
-                    if (h2.textContent.includes(oldText)) {
-                        h2.textContent = h2.textContent.replace(oldText, newName);
-                    }
-                });
-            };
-            
-            input.addEventListener('blur', handleChange);
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    input.blur();
-                }
-            });
-        });
-    });
-
-    document.querySelectorAll('#tpvTabHeader .tab').forEach((tab, index) => {
-        tab.addEventListener('click', function() {
-            const container = this.closest('.container');
-            const currentActiveTab = container.querySelector('.tab.active');
-            const currentIndex = Array.from(container.querySelectorAll('.tab')).indexOf(currentActiveTab);
-            
-            saveTabData(container, currentIndex, tpvData);
-            clearInputs(container);
-            container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            loadTabData(container, index, tpvData);
-        });
-    });
-
-    document.querySelectorAll('#ofertaTabHeader .tab').forEach((tab, index) => {
-        tab.addEventListener('click', function() {
-            const container = this.closest('.container');
-            const currentActiveTab = container.querySelector('.tab.active');
-            const currentIndex = Array.from(container.querySelectorAll('.tab')).indexOf(currentActiveTab);
-            
-            saveTabData(container, currentIndex, ofertaData);
-            clearInputs(container);
-            container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            loadTabData(container, index, ofertaData);
-        });
-
-        tab.addEventListener('dblclick', function(e) {
-            e.preventDefault(); // Prevent default double-click behavior
-            
-            // Create a temporary input element
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = this.textContent;
-            input.style.width = '80%';
-            input.style.height = '25px';
-            input.style.border = '1px solid var(--stone-green)';
-            input.style.borderRadius = '4px';
-            input.style.padding = '0 5px';
-            input.style.textAlign = 'center';
-            
-            // Replace tab text with input
-            const oldText = this.textContent;
-            this.textContent = '';
-            this.appendChild(input);
-            input.focus();
-            
-            // Handle input blur and enter key
-            const handleChange = () => {
-                const newName = input.value.trim() || oldText;
-                this.textContent = newName;
-                
-                // Update any existing comparison results
-                const comparisons = document.querySelectorAll('.comparison-result h2');
-                comparisons.forEach(h2 => {
-                    if (h2.textContent.includes(oldText)) {
-                        h2.textContent = h2.textContent.replace(oldText, newName);
-                    }
-                });
-            };
-            
-            input.addEventListener('blur', handleChange);
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    input.blur();
-                }
-            });
-        });
-    });
-
-    // Create CET fields for all containers
-    createCetFields('cetContainer');
-    createCetFields('tpvCetContainer');
-    createCetFields('ofertaCetContainer');
-
-    // Setup buttons for all containers
-    setupCetButton('cetButton', 'cetContainer');
-    setupCetButton('tpvCetButton', 'tpvCetContainer');
-    setupCetButton('ofertaCetButton', 'ofertaCetContainer');
-    
-    // Allow only numbers in inputs
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('keypress', function(e) {
-            if(!/[\d.,]/.test(e.key)) {
-                e.preventDefault();
-            }
-        });
-    });
-
-    // Add event listeners for currency formatting
-    document.querySelectorAll('.currency-input').forEach(input => {
-        input.addEventListener('input', handleCurrencyInput);
-        input.addEventListener('keypress', (e) => {
-            if (!/\d/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
-                e.preventDefault();
-            }
-        });
-    });
-
-    // Add event listeners for percentage formatting
-    document.querySelectorAll('.percentage-input').forEach(input => {
-        input.addEventListener('input', handlePercentageInput);
-        input.addEventListener('keypress', (e) => {
-            if (!/\d/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
-                e.preventDefault();
-            }
-        });
-    });
-
-    // Add click handlers for the add tab buttons
-    document.getElementById('addMaquinaTab').addEventListener('click', () => addTab('maquinaTabHeader', 'maquina'));
-    document.getElementById('addTpvTab').addEventListener('click', () => addTab('tpvTabHeader', 'tpv'));
-    document.getElementById('addOfertaTab').addEventListener('click', () => addTab('ofertaTabHeader', 'oferta'));
-
-    // Add delete button event listeners
-    document.getElementById('deleteMaquinaTab').addEventListener('click', () => deleteTab('maquinaTabHeader', 'maquina'));
-    document.getElementById('deleteTpvTab').addEventListener('click', () => deleteTab('tpvTabHeader', 'tpv'));
-    document.getElementById('deleteOfertaTab').addEventListener('click', () => deleteTab('ofertaTabHeader', 'oferta'));
-    
-    // Add active class to tabs by default
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.add('active');
-        
-        tab.addEventListener('click', function() {
-            // Remove active class from all tabs in this container
-            const container = this.closest('.container');
-            container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            // Add active class to clicked tab
-            this.classList.add('active');
-        });
-    });
-
-    // Add this function for economy investment suggestions
-    function getEconomyInvestmentSuggestion(annualValue) {
-        // Messages for different value ranges
-        if (annualValue < 100) {
-            return "💡 Toda economia é importante quando se trata do seu negócio!";
-        } else if (annualValue < 1000) {
-            const suggestions = [
-                "📚 Com esse valor anual você pode investir em cursos online ou treinamentos profissionais",
-                "💻 Com esse valor anual você pode investir em ferramentas de marketing digital",
-                "🖨️ Com esse valor anual você pode investir em equipamentos de escritório",
-                "📝 Com esse valor anual você pode investir em materiais de marketing"
-            ];
-            return suggestions[Math.floor(Math.random() * suggestions.length)];
-        } else if (annualValue < 5000) {
-            const suggestions = [
-                "💻 Com esse valor anual você pode investir em equipamentos de tecnologia",
-                "📊 Com esse valor anual você pode investir em softwares de gestão empresarial",
-                "🎓 Com esse valor anual você pode investir em treinamentos presenciais ou workshops",
-                "📣 Com esse valor anual você pode investir em anúncios publicitários",
-                "🔐 Com esse valor anual você pode investir em equipamentos de segurança"
-            ];
-return suggestions[Math.floor(Math.random() * suggestions.length)];
-        } else if (annualValue < 10000) {
-            const suggestions = [
-                "📱 Com esse valor anual você pode investir no desenvolvimento de aplicativos móveis",
-                "🎯 Com esse valor anual você pode investir em cursos de especialização ou certificação",
-                "🤝 Com esse valor anual você pode investir em participação em eventos ou feiras de negócios"
-            ];
-            return suggestions[Math.floor(Math.random() * suggestions.length)];
-        } else if (annualValue < 20000) {
-            const suggestions = [
-                "🗺️ Com esse valor anual você pode investir em publicidade outdoor",
-                "🌐 Com esse valor anual você pode investir no desenvolvimento de sites ou e-commerce",
-                "⚙️ Com esse valor anual você pode investir em equipamentos de automação de processos",
-                "👥 Com esse valor anual você pode investir em treinamentos de equipe ou coaching"
-            ];
-            return suggestions[Math.floor(Math.random() * suggestions.length)];
-        } else if (annualValue < 50000) {
-            const suggestions = [
-                "🤖 Com esse valor anual você pode investir em tecnologia de ponta",
-                "🚀 Com esse valor anual você pode investir no desenvolvimento de produtos ou serviços novos",
-                "👥 Com esse valor anual você pode investir na expansão de equipe ou contratação de especialistas",
-                "✈️ Com esse valor anual você pode investir em participação em eventos internacionais"
-            ];
-            return suggestions[Math.floor(Math.random() * suggestions.length)];
-        } else {
-            const suggestions = [
-                "🏢 Com esse valor anual você pode investir em imóveis comerciais",
-                "🔧 Com esse valor anual você pode investir na aquisição de equipamentos de grande porte",
-                "💡 Com esse valor anual você pode investir em projetos de inovação",
-                "🤝 Com esse valor anual você pode investir em startups ou joint-ventures",
-                "👔 Com esse valor anual você pode investir em consultorias de especialistas em negócios"
-            ];
-            return suggestions[Math.floor(Math.random() * suggestions.length)];
-        }
-    }
-
-    // Update the floating button click handler
-    document.querySelector('.floating-button').addEventListener('click', function() {
-        // Save data only for currently active tabs before comparing
-        const activeMaquinaTab = document.querySelector('#maquinaTabHeader .tab.active');
-        const activeTpvTab = document.querySelector('#tpvTabHeader .tab.active');
-        const activeOfertaTab = document.querySelector('#ofertaTabHeader .tab.active');
-        
-        if (activeMaquinaTab) {
-            const maquinaIndex = Array.from(document.querySelectorAll('#maquinaTabHeader .tab')).indexOf(activeMaquinaTab);
-            const container = activeMaquinaTab.closest('.container');
-            saveTabData(container, maquinaIndex, maquinaData);
-        }
-        
-        if (activeTpvTab) {
-            const tpvIndex = Array.from(document.querySelectorAll('#tpvTabHeader .tab')).indexOf(activeTpvTab);
-            const container = activeTpvTab.closest('.container');
-            saveTabData(container, tpvIndex, tpvData);
-        }
-        
-        if (activeOfertaTab) {
-            const ofertaIndex = Array.from(document.querySelectorAll('#ofertaTabHeader .tab')).indexOf(activeOfertaTab);
-            const container = activeOfertaTab.closest('.container');
-            saveTabData(container, ofertaIndex, ofertaData);
-        }
-
-        const resultadoDetalhado = document.getElementById('resultadoDetalhado');
-        const resultadoDetalhadoContainer = document.getElementById('resultadoDetalhadoContainer');
-        resultadoDetalhado.innerHTML = ''; 
-
-        let hasAnyResults = false; // Flag to track if we have any results
-        const ofertaTotals = {}; // Create an object to store the totals for each offer
-
-        const ofertaTabs = document.querySelectorAll('#ofertaTabHeader .tab:not(.hidden)');
-        const maquinaTabs = document.querySelectorAll('#maquinaTabHeader .tab:not(.hidden)');
-
-        ofertaTabs.forEach((ofertaTab, ofertaIndex) => {
-            maquinaTabs.forEach((maquinaTab, maquinaIndex) => {
-                const maquinaName = maquinaTab.textContent;
-                const ofertaName = ofertaTab.textContent;
-
-                // Add variables to track totals
-                let totalCurrentImpact = 0;
-                let totalOfertaImpact = 0;
-                let totalMonthlyDifference = 0;
-                let hasData = false; // Add flag to track if there's any data to display
-
-                // Create a temporary div to store comparison results
-                let tempComparisonHtml = '';
-
-                // Instead of directly adding to resultadoDetalhado.innerHTML, store in tempComparisonHtml
-                tempComparisonHtml += `
-                    <div class="comparison-result">
-                        <h2>Comparação: ${maquinaName} vs ${ofertaName}</h2>
-                `;
-
-                const fieldsToCompare = [
-                    {id: 'debito', label: 'Débito', isPercentage: true},
-                    {id: 'credito', label: 'Crédito', isPercentage: true},
-                    {id: 'pix', label: 'PIX', isPercentage: true},
-                    {id: 'credito_2_6', label: 'Crédito 2x a 6x', isPercentage: true},
-                    {id: 'credito_7_12', label: 'Crédito 7x a 12x', isPercentage: true},
-                    {id: 'aluguel', label: 'Aluguel', isPercentage: false, usesMachines: true}, // Add usesMachines flag
-                    {id: 'outros1', label: 'Outros 1', isPercentage: false},
-                    {id: 'outros2', label: 'Outros 2', isPercentage: false}
-                ];
-
-                // Compare fields and calculate differences
-                fieldsToCompare.forEach(field => {
-                    let currentValue = maquinaData[maquinaIndex][field.id];
-                    let ofertaValue = ofertaData[ofertaIndex][`oferta_${field.id}`];
-                    const tpvValue = getTpvValue(tpvData, maquinaIndex, field.id);
-
-                    // Special handling for credit field for both current and oferta values
-                    if (field.id === 'credito') {
-                        // For current value (Máquina Atual), always add antecipacao
-                        if (currentValue) {
-                            let antecipacaoValue = maquinaData[maquinaIndex]['antecipacao'];
-                            if (antecipacaoValue) {
-                                const creditNumeric = parseFloat(currentValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                                const antecipacaoNumeric = parseFloat(antecipacaoValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                                currentValue = `% ${(creditNumeric + antecipacaoNumeric).toFixed(2).replace('.', ',')}`;
-                            }
-                        }
-                        
-                        // For oferta, check if we should add antecipacao based on checkbox
-                        if (ofertaValue && isCreditoMdrChecked()) {
-                            let antecipacaoValue = ofertaData[ofertaIndex]['oferta_antecipacao'];
-                            if (antecipacaoValue) {
-                                const creditNumeric = parseFloat(ofertaValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                                const antecipacaoNumeric = parseFloat(antecipacaoValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                                ofertaValue = `% ${(creditNumeric + antecipacaoNumeric).toFixed(2).replace('.', ',')}`;
-                            }
-                        }
-                    }
-
-                    // If this is aluguel field, multiply by number of machines
-                    if (field.usesMachines) {
-                        let currentMachines = maquinaData[maquinaIndex]['maquinas'];
-                        let ofertaMachines = ofertaData[ofertaIndex]['oferta_maquinas'];
-                        
-                        currentMachines = (!currentMachines || currentMachines === '0' || currentMachines === '') ? 1 : parseInt(currentMachines);
-                        ofertaMachines = (!ofertaMachines || ofertaMachines === '0' || ofertaMachines === '') ? 1 : parseInt(ofertaMachines);
-                        
-                        if (currentValue) {
-                            const currentNumeric = parseFloat(currentValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                            currentValue = `R$ ${(currentNumeric * currentMachines).toFixed(2).replace('.', ',')}`;
-                        }
-                        if (ofertaValue) {
-                            // Add check for IPV checkbox
-                            const isIpvChecked = document.getElementById('ipv').checked;
-                            if (field.id === 'aluguel' && isIpvChecked) {
-                                ofertaValue = 'R$ 0,00';
-                            } else {
-                                const ofertaNumeric = parseFloat(ofertaValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                                ofertaValue = `R$ ${(ofertaNumeric * ofertaMachines).toFixed(2).replace('.', ',')}`;
-                            }
-                        }
-                    }
-
-                    // Update the condition in the fields comparison
-                    const currentNumeric = parseFloat(currentValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                    const ofertaNumeric = parseFloat(ofertaValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                    
-                    if (currentValue && ofertaValue && (currentNumeric !== 0 || ofertaNumeric !== 0)) {
-                        hasData = true; // Set flag when we find valid data
-                        // Add to totals for non-percentage fields (monthly impact)
-                        if (!field.isPercentage) {
-                            totalCurrentImpact += currentNumeric;
-                            totalOfertaImpact += ofertaNumeric;
-                            totalMonthlyDifference += (ofertaNumeric - currentNumeric);
-                        }
-                        
-                        let resultHtml = `
-                            <div class="comparison-result">
-                                <h2>${field.label}</h2>
-                                <table class="comparison-table">
-                                    <tr>
-                                        <th>Diferença</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="${ofertaNumeric - currentNumeric < 0 ? 'savings' : 'loss'}">${field.isPercentage ? 
-                                            `${(ofertaNumeric - currentNumeric).toFixed(2).replace('.', ',')}%` : 
-                                            `R$ ${Math.abs(ofertaNumeric - currentNumeric).toFixed(2).replace('.', ',')}`
-                                        }</td>
-                                    </tr>
-                        `;
-
-                        // Only add TPV calculations for percentage fields
-                        if (field.isPercentage && tpvValue) {
-                            const tpvNumeric = parseFloat(tpvValue.replace(/[^\d,]/g, '').replace(',', '.'));
-                            const currentImpact = (tpvNumeric * currentNumeric) / 100;
-                            const ofertaImpact = (tpvNumeric * ofertaNumeric) / 100;
-                            const monthlyDifference = ofertaImpact - currentImpact;
-
-                            // Add this monthlyDifference to totalMonthlyDifference
-                            totalMonthlyDifference += monthlyDifference;
-
-                            resultHtml += `
-                                    <tr>
-                                        <th>${monthlyDifference < 0 ? 'Economia Mensal' : 'Investimento Mensal'}</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="${monthlyDifference < 0 ? 'savings' : 'loss'}">
-                                            R$ ${Math.abs(monthlyDifference).toFixed(2).replace('.', ',')}
-                                        </td>
-                                    </tr>
-                            `;
-                            // Add to totals
-                            totalCurrentImpact += currentImpact;
-                            totalOfertaImpact += ofertaImpact;
-                        }
-
-                        resultHtml += `
-                                </table>
-                            </div>
-                        `;
-
-                        tempComparisonHtml += resultHtml; // Append to tempComparisonHtml
-                    }
-                });
-
-                // Add Raio-X comparison if checkbox is checked
-                const isRaioXChecked = document.getElementById('raio_x').checked;
-                if (isRaioXChecked) {
-                    const raioXValue = 59.90;
-                    totalCurrentImpact += raioXValue;
-                    totalMonthlyDifference -= raioXValue; // Subtract because it's a savings
-                    
-                    tempComparisonHtml += `
-                        <div class="comparison-result">
-                            <h2>Raio-X</h2>
-                            <table class="comparison-table">
-                                <tr>
-                                    <th>Diferença</th>
-                                </tr>
-                                <tr>
-                                    <td class="savings">R$ ${raioXValue.toFixed(2).replace('.', ',')}</td>
-                                </tr>
-                                <tr>
-                                    <th>Economia Mensal</th>
-                                </tr>
-                                <tr>
-                                    <td class="savings">R$ ${raioXValue.toFixed(2).replace('.', ',')}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    `;
-                    hasData = true; // Ensure we show the comparison if Raio-X is the only difference
-                }
-
-                // CET comparison logic
-                for (let i = 1; i <= 12; i++) {
-                    const currentCet = maquinaData[maquinaIndex][`cetContainer_${i}x`];
-                    const ofertaCet = ofertaData[ofertaIndex][`ofertaCetContainer_${i}x`];
-                    const tpvCet = getTpvValue(tpvData, maquinaIndex, `tpvCetContainer_${i}x`);
-
-                    if (currentCet && ofertaCet && currentCet !== '0,00' && ofertaCet !== '0,00') {
-                        const currentNumeric = parseFloat(currentCet.replace(/[^\d,]/g, '').replace(',', '.'));
-                        const ofertaNumeric = parseFloat(ofertaCet.replace(/[^\d,]/g, '').replace(',', '.'));
-
-                        if (currentNumeric !== 0 || ofertaNumeric !== 0) {
-                            hasData = true; // Set flag when we find valid data
-                            let resultHtml = `
-                                <div class="comparison-result">
-                                    <h2>Parcelado ${i}x</h2>
-                                    <table class="comparison-table">
-                                        <tr>
-                                            <th>Diferença</th>
-                                        </tr>
-                                        <tr>
-                                            <td class="${ofertaNumeric - currentNumeric < 0 ? 'savings' : 'loss'}">${(ofertaNumeric - currentNumeric).toFixed(2).replace('.', ',')}%</td>
-                                        </tr>
-                            `;
-
-                            if (tpvCet) {
-                                const tpvNumeric = parseFloat(tpvCet.replace(/[^\d,]/g, '').replace(',', '.'));
-                                const currentImpact = (tpvNumeric * currentNumeric) / 100;
-                                const ofertaImpact = (tpvNumeric * ofertaNumeric) / 100;
-                                const monthlyDifference = ofertaImpact - currentImpact;
-
-                                // Add this difference to the total
-                                totalMonthlyDifference += monthlyDifference;
-
-                                resultHtml += `
-                                    <tr>
-                                        <th>${monthlyDifference < 0 ? 'Economia Mensal' : 'Investimento Mensal'}</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="${monthlyDifference < 0 ? 'savings' : 'loss'}">
-                                            R$ ${Math.abs(monthlyDifference).toFixed(2).replace('.', ',')}
-                                        </td>
-                                    </tr>
-                                `;
-                                
-                                // Add to totals
-                                totalCurrentImpact += currentImpact;
-                                totalOfertaImpact += ofertaImpact;
-                            }
-
-                            resultHtml += `
-                                    </table>
-                                </div>
-                            `;
-
-                            tempComparisonHtml += resultHtml; // Append to tempComparisonHtml
-                        }
-                    }
-                }
-
-                // Only add the total summary and append all content if we have data
-                if (hasData) {
-                    hasAnyResults = true; // Set flag when we have results
-                    tempComparisonHtml += `
-                        <div class="comparison-result">
-                            <h2>Total da Comparação</h2>
-                            <table class="comparison-table">
-                                <tr>
-                                    <th>${totalMonthlyDifference < 0 ? 'Economia Total Mensal' : 'Investimento Total Mensal'}</th>
-                                </tr>
-                                <tr>
-                                    <td class="${totalMonthlyDifference < 0 ? 'savings' : 'loss'}">
-                                        R$ ${Math.abs(totalMonthlyDifference).toFixed(2).replace('.', ',')}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    `;
-                    
-                    // Initialize the offer total if it doesn't exist
-                    if (!ofertaTotals[ofertaName]) {
-                        ofertaTotals[ofertaName] = 0;
-                    }
-                    // Add this comparison's difference to the offer total
-                    ofertaTotals[ofertaName] += totalMonthlyDifference;
-
-                    // Only append to resultadoDetalhado if we have data to show
-                    resultadoDetalhado.innerHTML += tempComparisonHtml;
-                }
-            });
-        });
-
-        // After all comparisons are done, update the Resultado Total section
-        const resultadoTotalContent = document.getElementById('resultadoTotalContent');
-        resultadoTotalContent.innerHTML = '';
-
-        if (Object.keys(ofertaTotals).length === 0) {
-            resultadoTotalContent.innerHTML = `
-                <div class="comparison-result">
-                    <h2>Nenhum Resultado Encontrado</h2>
-                    <div style="text-align: center; padding: 20px;">
-                        <p style="color: #666; margin-bottom: 15px;">
-                            Não foi possível realizar nenhuma comparação. Por favor, verifique se você:
-                        </p>
-                        <ul style="list-style: none; color: #666; line-height: 1.8;">
-                            <li>✓ Preencheu as taxas da máquina atual</li>
-                            <li>✓ Informou o volume mensal (TPV)</li>
-                            <li>✓ Incluiu os valores da oferta Stone</li>
-                        </ul>
-                        <p style="color: #666; margin-top: 15px; font-style: italic;">
-                            Preencha os campos necessários para visualizar a comparação entre as taxas atuais e a oferta Stone.
-                        </p>
+            <div id="manual-controls">
+                <div class="control-group">
+                    <label>Impostores</label>
+                    <div class="counter-input">
+                        <button class="btn-counter" onclick="adjustCount('impostors', -1)">-</button>
+                        <span id="impostorsVal">1</span>
+                        <button class="btn-counter" onclick="adjustCount('impostors', 1)">+</button>
                     </div>
                 </div>
-            `;
-        } else {
-            // Existing code for displaying results
-            Object.entries(ofertaTotals).forEach(([ofertaName, totalDifference]) => {
-                const isEconomia = totalDifference < 0;
-                const annualValue = Math.abs(totalDifference * 12);
-                const dailyValue = Math.abs(totalDifference / 30);
-                
-                const percentageImpact = !isEconomia ? calculateTpvPercentageImpact(tpvData, 0, totalDifference) : null;
-                const tpvMessage = percentageImpact ? 
-                    `<p style="margin-top: 15px; color: #666; font-style: italic; text-align: center;">📊 Essa Oferta Stone equivale apenas a ${percentageImpact}% do volume informado de venda mensal.</p>` : '';
 
-                const summaryHtml = `
-                    <div class="comparison-result">
-                        <h2>${ofertaName}</h2>
-                        ${totalDifference === 0 ? `
-                            <table class="comparison-table">
-                                <tr>
-                                    <th>Resultado</th>
-                                </tr>
-                                <tr>
-                                    <td class="savings highlight-value">
-                                        Custo Zero!
-                                    </td>
-                                </tr>
-                            </table>
-                            <p style="margin-top: 15px; color: #666; font-style: italic; text-align: center;">
-                                🎉 Excelente notícia! Esta oferta Stone não requer nenhum investimento adicional!
-                            </p>
-                            <p style="margin-top: 15px; color: #666; font-style: italic; text-align: center;">
-                                ✨ Você pode fazer a mudança para Stone sem impacto em seus custos atuais e ainda ter acesso a todo nosso portfólio de soluções e atendimento personalizado!
-                            </p>
-                        ` : `
-                            <table class="comparison-table">
-                                <tr>
-                                    <th>${isEconomia ? 'Economia Anual' : 'Investimento Diário'}</th>
-                                </tr>
-                                <tr>
-                                    <td class="${isEconomia ? 'savings' : 'loss highlight-value'}">
-                                        ${isEconomia ? 'R$ ' + annualValue.toFixed(2).replace('.', ',') : 'R$ ' + dailyValue.toFixed(2).replace('.', ',')}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Total Mensal</th>
-                                </tr>
-                                <tr>
-                                    <td class="${isEconomia ? 'savings' : 'loss'}">
-                                        ${isEconomia ? 'Economia' : 'Investimento'} de R$ ${Math.abs(totalDifference).toFixed(2).replace('.', ',')}
-                                    </td>
-                                </tr>
-                            </table>
-                            ${isEconomia ? `
-                                <p style="margin-top: 15px; color: #666; font-style: italic; text-align: center;">
-                                    🎉 Parabéns! Você encontrou a melhor oferta Stone! Esta proposta irá gerar economia para o seu negócio e impulsionar seus resultados!
-                                </p>
-                                <p style="margin-top: 15px; color: #666; font-style: italic; text-align: center;">${getEconomyInvestmentSuggestion(annualValue)}</p>
-                            ` : `
-                                <p style="margin-top: 15px; color: #666; font-style: italic; text-align: center;">${getDailyInvestmentComparison(dailyValue)}</p>
-                                ${tpvMessage}
-                            `}
-                        `}
+                <div class="switch-container">
+                    <label>Habilitar Detetive</label>
+                    <label class="switch">
+                        <input type="checkbox" id="hasDetective" onchange="toggleDetectiveInput()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="control-group" id="detective-control" style="opacity: 0.5; pointer-events: none;">
+                    <label>Detetives</label>
+                    <div class="counter-input">
+                        <button class="btn-counter" onclick="adjustCount('detectives', -1)">-</button>
+                        <span id="detectivesVal">0</span>
+                        <button class="btn-counter" onclick="adjustCount('detectives', 1)">+</button>
                     </div>
-                `;
+                </div>
+            </div>
+
+            <div class="switch-container">
+                <label title="Se ativado, o impostor verá que é o Impostor. Se desativado, ele verá 'Civil' mas com o ícone errado.">Impostor sabe que é Impostor?</label>
+                <label class="switch">
+                    <input type="checkbox" id="impostorKnows" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="btn-main btn-start" onclick="startGame()">INICIAR JOGO</button>
+        </div>
+
+        <div id="screen-game" class="screen">
+            <h3 id="round-indicator" style="text-align: center; color: #888; margin-bottom: 20px;">Jogador 1 de 5</h3>
+            
+            <div class="card-reveal-area">
                 
-                resultadoTotalContent.innerHTML += summaryHtml;
-            });
-        }
+                <div id="view-hidden" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div class="player-turn-text">Passe para o <span id="current-player-name" style="font-weight:bold; color:#fff;">Jogador 1</span></div>
+                    <i class="fa-solid fa-fingerprint" style="font-size: 5rem; color: #555; margin: 30px 0;"></i>
+                    <button class="btn-main btn-reveal" onclick="revealCard()">MOSTRAR PAPEL</button>
+                </div>
 
-        // After all comparisons are done, show/hide container based on results
-        if (hasAnyResults) {
-            resultadoDetalhadoContainer.classList.add('has-results');
-        } else {
-            resultadoDetalhadoContainer.classList.remove('has-results');
-        }
+                <div id="view-revealed" class="secret-content">
+                    <div id="role-icon" class="icon-display"></div>
+                    <div id="role-name" class="role-text">CIVIL</div>
+                    <div id="item-name" class="hidden-info" style="margin-bottom: 20px;">Objeto</div>
+                    <p style="text-align: center; margin-bottom: 20px; font-size: 0.9rem; opacity: 0.8;">Memorize sua imagem e clique para esconder.</p>
+                    <button class="btn-main btn-hide" onclick="hideCard()">ESCONDER</button>
+                </div>
 
-        // After all the comparison logic, scroll to the Resultado Total section
-        const resultadoTotalSection = document.getElementById('resultadoTotalContent');
-        if (resultadoTotalSection) {
-            resultadoTotalSection.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
+            </div>
+        </div>
 
-    const resultadoDetalhadoHeader = document.querySelector('#resultadoDetalhadoContainer .section-header');
-    const resultadoDetalhadoContent = document.getElementById('resultadoDetalhado');
+        <div id="screen-result" class="screen" style="text-align: center;">
+            <i class="fa-solid fa-comments" style="font-size: 4rem; color: var(--accent); margin-bottom: 20px;"></i>
+            <h1>Hora da Votação!</h1>
+            <p style="margin-bottom: 30px; line-height: 1.6;">Todos viram suas cartas.<br>Debatam e encontrem o impostor!</p>
+            
+            <button class="btn-main btn-start" onclick="returnToMenu()">NOVA RODADA</button>
+        </div>
 
-    // Set initial state as collapsed
-    resultadoDetalhadoContent.classList.add('collapsed-content');
+    </div>
 
-    // Add double click handler to the header
-    resultadoDetalhadoHeader.addEventListener('dblclick', function() {
-        if (resultadoDetalhadoContent.classList.contains('collapsed-content')) {
-            resultadoDetalhadoContent.classList.remove('collapsed-content');
-            resultadoDetalhadoContent.classList.add('expanded-content');
-        } else {
-            resultadoDetalhadoContent.classList.remove('expanded-content');
-            resultadoDetalhadoContent.classList.add('collapsed-content');
-        }
-    });
+    <script>
+        // --- BANCO DE DADOS DE ÍCONES (PARES: CIVIL, IMPOSTOR) ---
+        // Mais de 100 opções conceituais (50 pares = 100 icones, expansível)
+        const iconPairs = [
+            // Natureza
+            { c: {i: 'fa-sun', n: 'Sol'}, i: {i: 'fa-star', n: 'Estrela'} },
+            { c: {i: 'fa-cloud-rain', n: 'Chuva'}, i: {i: 'fa-snowflake', n: 'Neve'} },
+            { c: {i: 'fa-fire', n: 'Fogo'}, i: {i: 'fa-volcano', n: 'Vulcão'} },
+            { c: {i: 'fa-tree', n: 'Árvore'}, i: {i: 'fa-leaf', n: 'Folha'} },
+            { c: {i: 'fa-mountain', n: 'Montanha'}, i: {i: 'fa-tents', n: 'Acampamento'} },
+            { c: {i: 'fa-water', n: 'Água'}, i: {i: 'fa-droplet', n: 'Gota'} },
+            
+            // Animais
+            { c: {i: 'fa-cat', n: 'Gato'}, i: {i: 'fa-dog', n: 'Cachorro'} },
+            { c: {i: 'fa-fish', n: 'Peixe'}, i: {i: 'fa-shrimp', n: 'Camarão'} },
+            { c: {i: 'fa-spider', n: 'Aranha'}, i: {i: 'fa-bug', n: 'Besouro'} },
+            { c: {i: 'fa-horse', n: 'Cavalo'}, i: {i: 'fa-cow', n: 'Vaca'} },
+            { c: {i: 'fa-crow', n: 'Corvo'}, i: {i: 'fa-dove', n: 'Pomba'} },
+            { c: {i: 'fa-frog', n: 'Sapo'}, i: {i: 'fa-otter', n: 'Lontra'} },
+            
+            // Comida
+            { c: {i: 'fa-apple-whole', n: 'Maçã'}, i: {i: 'fa-lemon', n: 'Limão'} },
+            { c: {i: 'fa-burger', n: 'Hambúrguer'}, i: {i: 'fa-hotdog', n: 'Cachorro-quente'} },
+            { c: {i: 'fa-pizza-slice', n: 'Pizza'}, i: {i: 'fa-cheese', n: 'Queijo'} },
+            { c: {i: 'fa-ice-cream', n: 'Sorvete'}, i: {i: 'fa-cookie', n: 'Cookie'} },
+            { c: {i: 'fa-carrot', n: 'Cenoura'}, i: {i: 'fa-pepper-hot', n: 'Pimenta'} },
+            { c: {i: 'fa-mug-hot', n: 'Café'}, i: {i: 'fa-wine-glass', n: 'Vinho'} },
+            { c: {i: 'fa-bread-slice', n: 'Pão'}, i: {i: 'fa-cake-candles', n: 'Bolo'} },
 
-    // Update the D1 checkbox event listener
-    document.getElementById('oferta_d1').addEventListener('change', function() {
-        if (this.checked) {
-            // Uncheck D0 and hide its input container
-            document.getElementById('oferta_d0').checked = false;
-            document.getElementById('oferta_d0_container').style.display = 'none';
+            // Transporte
+            { c: {i: 'fa-car', n: 'Carro'}, i: {i: 'fa-bus', n: 'Ônibus'} },
+            { c: {i: 'fa-plane', n: 'Avião'}, i: {i: 'fa-helicopter', n: 'Helicóptero'} },
+            { c: {i: 'fa-bicycle', n: 'Bicicleta'}, i: {i: 'fa-motorcycle', n: 'Moto'} },
+            { c: {i: 'fa-train', n: 'Trem'}, i: {i: 'fa-train-subway', n: 'Metrô'} },
+            { c: {i: 'fa-ship', n: 'Navio'}, i: {i: 'fa-sailboat', n: 'Barco a Vela'} },
             
-            // Show D1 input field and set default value
-            const d1Container = document.getElementById('oferta_d1_container');
-            d1Container.style.display = 'block';
-            const d1Input = document.getElementById('oferta_d1_value');
-            d1Input.value = d1Input.value || '% 0,30';
+            // Objetos / Casa
+            { c: {i: 'fa-key', n: 'Chave'}, i: {i: 'fa-lock', n: 'Cadeado'} },
+            { c: {i: 'fa-mobile', n: 'Celular'}, i: {i: 'fa-tablet', n: 'Tablet'} },
+            { c: {i: 'fa-pen', n: 'Caneta'}, i: {i: 'fa-pencil', n: 'Lápis'} },
+            { c: {i: 'fa-book', n: 'Livro'}, i: {i: 'fa-newspaper', n: 'Jornal'} },
+            { c: {i: 'fa-shirt', n: 'Camisa'}, i: {i: 'fa-socks', n: 'Meia'} },
+            { c: {i: 'fa-couch', n: 'Sofá'}, i: {i: 'fa-chair', n: 'Cadeira'} },
+            { c: {i: 'fa-bed', n: 'Cama'}, i: {i: 'fa-mattress-pillow', n: 'Travesseiro'} },
+            { c: {i: 'fa-lightbulb', n: 'Lâmpada'}, i: {i: 'fa-plug', n: 'Tomada'} },
+            
+            // Esportes / Lazer
+            { c: {i: 'fa-futbol', n: 'Futebol'}, i: {i: 'fa-basketball', n: 'Basquete'} },
+            { c: {i: 'fa-gamepad', n: 'Videogame'}, i: {i: 'fa-dice', n: 'Dados'} },
+            { c: {i: 'fa-guitar', n: 'Violão'}, i: {i: 'fa-drum', n: 'Tambor'} },
+            { c: {i: 'fa-camera', n: 'Câmera'}, i: {i: 'fa-video', n: 'Filmadora'} },
+            
+            // Profissões / Pessoas
+            { c: {i: 'fa-user-doctor', n: 'Médico'}, i: {i: 'fa-user-nurse', n: 'Enfermeiro'} },
+            { c: {i: 'fa-user-graduate', n: 'Estudante'}, i: {i: 'fa-school', n: 'Escola'} },
+            { c: {i: 'fa-user-astronaut', n: 'Astronauta'}, i: {i: 'fa-rocket', n: 'Foguete'} },
+            { c: {i: 'fa-crown', n: 'Rei'}, i: {i: 'fa-chess-king', n: 'Rei (Xadrez)'} },
+            
+            // Aleatórios
+            { c: {i: 'fa-ghost', n: 'Fantasma'}, i: {i: 'fa-skull', n: 'Caveira'} },
+            { c: {i: 'fa-gift', n: 'Presente'}, i: {i: 'fa-box', n: 'Caixa'} },
+            { c: {i: 'fa-heart', n: 'Coração'}, i: {i: 'fa-heart-crack', n: 'Coração Partido'} },
+            { c: {i: 'fa-money-bill', n: 'Dinheiro'}, i: {i: 'fa-credit-card', n: 'Cartão'} },
+        ];
 
-            // Add D1 value to Débito and Crédito fields
-            const d1Value = parseFloat(d1Input.value.replace(/[^\d,]/g, '').replace(',', '.'));
+        // --- ESTADO DO JOGO ---
+        let state = {
+            totalPlayers: 5,
+            impostors: 1,
+            detectives: 0,
+            players: [], // Array de objetos {role, icon, name}
+            currentPlayerIndex: 0,
+            usedPairs: [] // Para evitar repetição na sessão
+        };
 
-            const debitoField = document.getElementById('oferta_debito');
-            const creditoField = document.getElementById('oferta_credito');
-            
-            // Store original values as data attributes if not already stored
-            if (!debitoField.dataset.originalValue) {
-                debitoField.dataset.originalValue = debitoField.value || '% 0,00';
-            }
-            if (!creditoField.dataset.originalValue) {
-                creditoField.dataset.originalValue = creditoField.value || '% 0,00';
-            }
-            
-            // Add D1 value to current values
-            const currentDebitoValue = parseFloat(debitoField.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            const currentCreditoValue = parseFloat(creditoField.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            
-            debitoField.value = `% ${(currentDebitoValue + d1Value).toFixed(2)}`.replace('.', ',');
-            creditoField.value = `% ${(currentCreditoValue + d1Value).toFixed(2)}`.replace('.', ',');
-            
-        } else {
-            // Hide D1 input field when unchecked
-            document.getElementById('oferta_d1_container').style.display = 'none';
-            
-            // Restore original values of Débito and Crédito fields
-            const debitoField = document.getElementById('oferta_debito');
-            const creditoField = document.getElementById('oferta_credito');
-            
-            if (debitoField.dataset.originalValue) {
-                debitoField.value = debitoField.dataset.originalValue;
-                delete debitoField.dataset.originalValue;
-            }
-            
-            if (creditoField.dataset.originalValue) {
-                creditoField.value = creditoField.dataset.originalValue;
-                delete creditoField.dataset.originalValue;
-            }
-        }
-    });
+        // --- MANIPULAÇÃO DO DOM (CONFIGURAÇÃO) ---
+        const totalPlayersInput = document.getElementById('totalPlayers');
+        const chaosModeInput = document.getElementById('chaosMode');
+        const hasDetectiveInput = document.getElementById('hasDetective');
+        const manualControls = document.getElementById('manual-controls');
 
-    // Update the D0 checkbox event listener
-    document.getElementById('oferta_d0').addEventListener('change', function() {
-        if (this.checked) {
-            // Uncheck D1 and hide its input container
-            document.getElementById('oferta_d1').checked = false;
-            document.getElementById('oferta_d1_container').style.display = 'none';
-            
-            // Show D0 input field and set default value
-            const d0Container = document.getElementById('oferta_d0_container');
-            d0Container.style.display = 'block';
-            const d0Input = document.getElementById('oferta_d0_value');
-            d0Input.value = d0Input.value || '% 0,50';
-
-            // Add D0 value to Débito and Crédito fields
-            const d0Value = parseFloat(d0Input.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            
-            const debitoField = document.getElementById('oferta_debito');
-            const creditoField = document.getElementById('oferta_credito');
-            
-            // Store original values as data attributes if not already stored
-            if (!debitoField.dataset.originalValue) {
-                debitoField.dataset.originalValue = debitoField.value || '% 0,00';
-            }
-            if (!creditoField.dataset.originalValue) {
-                creditoField.dataset.originalValue = creditoField.value || '% 0,00';
-            }
-            
-            // Add D0 value to current values
-            const originalDebitoValue = parseFloat(debitoField.dataset.originalValue.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            const originalCreditoValue = parseFloat(creditoField.dataset.originalValue.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            
-            debitoField.value = `% ${(originalDebitoValue + d0Value).toFixed(2)}`.replace('.', ',');
-            creditoField.value = `% ${(originalCreditoValue + d0Value).toFixed(2)}`.replace('.', ',');
-            
-        } else {
-            // Hide D0 input field when unchecked
-            document.getElementById('oferta_d0_container').style.display = 'none';
-            
-            // Restore original values of Débito and Crédito fields
-            const debitoField = document.getElementById('oferta_debito');
-            const creditoField = document.getElementById('oferta_credito');
-            
-            if (debitoField.dataset.originalValue) {
-                debitoField.value = debitoField.dataset.originalValue;
-                delete debitoField.dataset.originalValue;
-            }
-            
-            if (creditoField.dataset.originalValue) {
-                creditoField.value = creditoField.dataset.originalValue;
-                delete creditoField.dataset.originalValue;
-            }
-        }
-    });
-
-    // Update event listener for D0 value changes
-    document.getElementById('oferta_d0_value').addEventListener('input', function() {
-        const d0Checkbox = document.getElementById('oferta_d0');
-        if (d0Checkbox.checked) {
-            const d0Value = parseFloat(this.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            
-            const debitoField = document.getElementById('oferta_debito');
-            const creditoField = document.getElementById('oferta_credito');
-            
-            const originalDebitoValue = parseFloat(debitoField.dataset.originalValue?.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            const originalCreditoValue = parseFloat(creditoField.dataset.originalValue?.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-            
-            debitoField.value = `% ${(originalDebitoValue + d0Value).toFixed(2)}`.replace('.', ',');
-            creditoField.value = `% ${(originalCreditoValue + d0Value).toFixed(2)}`.replace('.', ',');
-        }
-    });
-
-    // Add scroll event to change header class on scroll
-    document.addEventListener('scroll', function() {
-        const header = document.querySelector('.top-header');
-        if (window.scrollY > 20) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-
-    // Find the Deadline menu item and add click handler
-    document.querySelector('.menu-item:nth-child(2)').addEventListener('click', function() {
-        // Close menu
-        sideMenu.classList.remove('open');
-        menuOverlay.style.display = 'none';
-        menuToggle.classList.remove('open');
-        
-        // Show deadline modal
-        const deadlineModal = document.getElementById('deadlineModal');
-        deadlineModal.style.display = 'flex';
-        
-        // Set default date and time to now
-        const now = new Date();
-        const dateInput = document.getElementById('deadlineDate');
-        const timeInput = document.getElementById('deadlineTime');
-        
-        dateInput.valueAsDate = now;
-        timeInput.value = now.getHours().toString().padStart(2, '0') + ':' + 
-                         now.getMinutes().toString().padStart(2, '0');
-    });
-
-    // Add deadline option click handlers
-    document.querySelectorAll('.deadline-option').forEach(option => {
-        option.addEventListener('click', function() {
-            // Remove selected class from all options
-            document.querySelectorAll('.deadline-option').forEach(opt => 
-                opt.classList.remove('selected'));
-            
-            // Add selected class to clicked option
-            this.classList.add('selected');
+        totalPlayersInput.addEventListener('input', (e) => {
+            state.totalPlayers = parseInt(e.target.value);
+            document.getElementById('totalPlayersVal').innerText = state.totalPlayers;
+            validateCounts();
         });
-    });
 
-    // Add this event listener to handle the cancel button click
-    document.getElementById('cancelDeadline').addEventListener('click', function() {
-        const modal = document.getElementById('deadlineModal');
-        modal.style.display = 'none';
-    });
-    
-    // Update the confirm button handler in the DOMContentLoaded event listener
-    document.getElementById('confirmDeadline').addEventListener('click', function() {
-        const modal = document.getElementById('deadlineModal');
-        const selectedOption = document.querySelector('.deadline-option.selected');
-        const dateInput = document.getElementById('deadlineDate');
-        const timeInput = document.getElementById('deadlineTime');
-        
-        let deadline;
-        let showCountdownAfter;
-        
-        // Set countdown end time from date/time inputs
-        if (dateInput.value && timeInput.value) {
-            deadline = new Date(dateInput.value + 'T' + timeInput.value);
-        } else {
-            deadline = new Date();
-            deadline.setMinutes(deadline.getMinutes() + 1);
+        chaosModeInput.addEventListener('change', (e) => {
+            if(e.target.checked) {
+                manualControls.style.opacity = '0.3';
+                manualControls.style.pointerEvents = 'none';
+            } else {
+                manualControls.style.opacity = '1';
+                manualControls.style.pointerEvents = 'all';
+            }
+        });
+
+        function toggleDetectiveInput() {
+            const controls = document.getElementById('detective-control');
+            if(hasDetectiveInput.checked) {
+                controls.style.opacity = '1';
+                controls.style.pointerEvents = 'all';
+                state.detectives = 1;
+            } else {
+                controls.style.opacity = '0.5';
+                controls.style.pointerEvents = 'none';
+                state.detectives = 0;
+            }
+            document.getElementById('detectivesVal').innerText = state.detectives;
+            validateCounts();
         }
-        
-        // Determine when to show the countdown based on selected option
-        if (selectedOption) {
-            const value = selectedOption.dataset.value;
-            switch(value) {
-                case 'immediate':
-                    showCountdownAfter = 0;
-                    break;
-                case '30':
-                    showCountdownAfter = 30000; // 30 seconds
-                    break;
-                case '60':
-                    showCountdownAfter = 60000; // 1 minute
-                    break;
-                case '120':
-                    showCountdownAfter = 120000; // 2 minutes
-                    break;
-                default:
-                    showCountdownAfter = 0;
+
+        function adjustCount(type, delta) {
+            const maxSpecials = Math.floor(state.totalPlayers / 3);
+            
+            if (type === 'impostors') {
+                let newVal = state.impostors + delta;
+                if (newVal < 1) newVal = 1; // Mínimo 1 impostor
+                // Validação Regra 3/1
+                if (newVal + state.detectives <= maxSpecials) {
+                    state.impostors = newVal;
+                }
+            } else if (type === 'detectives') {
+                let newVal = state.detectives + delta;
+                if (newVal < 0) newVal = 0;
+                if (newVal + state.impostors <= maxSpecials) {
+                    state.detectives = newVal;
+                }
             }
             
-            // Clear any existing countdown
-            const countdownBanner = document.getElementById('countdownBanner');
-            if (countdownBanner.dataset.timerInterval) {
-                clearInterval(parseInt(countdownBanner.dataset.timerInterval));
+            document.getElementById('impostorsVal').innerText = state.impostors;
+            document.getElementById('detectivesVal').innerText = state.detectives;
+            validateCounts();
+        }
+
+        function validateCounts() {
+            const maxSpecials = Math.floor(state.totalPlayers / 3);
+            document.getElementById('rule-msg').innerText = `Máx. Especiais (Imp+Det): ${maxSpecials}`;
+            
+            // Correção automática se o número de jogadores diminuir
+            if (!chaosModeInput.checked) {
+                if (state.impostors + state.detectives > maxSpecials) {
+                    // Reseta para padrão seguro
+                    state.detectives = 0;
+                    state.impostors = Math.max(1, maxSpecials); 
+                    if(state.impostors > maxSpecials) state.impostors = 1; // Caso jogadores < 3 (embora min seja 3)
+                    
+                    document.getElementById('impostorsVal').innerText = state.impostors;
+                    document.getElementById('detectivesVal').innerText = state.detectives;
+                    if(hasDetectiveInput.checked) {
+                        // Se tinha detetive mas não cabe mais, mantém marcado mas zero, ou ajusta impostor
+                        // Simplesmente ajustamos os valores visuais
+                    }
+                }
+            }
+        }
+
+        // --- LÓGICA DO JOGO ---
+
+        function getUniqueIconPair() {
+            // Se já usamos todos, reseta
+            if (state.usedPairs.length >= iconPairs.length) {
+                state.usedPairs = [];
             }
             
-            // Hide countdown initially
-            countdownBanner.style.display = 'none';
+            let pair;
+            let index;
+            do {
+                index = Math.floor(Math.random() * iconPairs.length);
+            } while (state.usedPairs.includes(index));
+
+            state.usedPairs.push(index);
+            return iconPairs[index];
+        }
+
+        function startGame() {
+            const maxSpecials = Math.floor(state.totalPlayers / 3);
             
-            // Start countdown after delay
-            setTimeout(() => {
-                countdownBanner.style.display = 'block';
-                updateCountdown(deadline);
+            let numImpostors = state.impostors;
+            let numDetectives = state.detectives;
+
+            // Modo Caos
+            if (chaosModeInput.checked) {
+                // Aleatório respeitando o limite
+                // Mínimo 1 impostor
+                // Resto pode ser detetive ou nada
                 
-                // Scroll countdown into view
-                countdownBanner.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }, showCountdownAfter);
-        }
-        
-        // Close the modal
-        modal.style.display = 'none';
-    });
+                // Ex: 9 jogadores -> max 3 especiais.
+                // Impostor: rand(1, 3). Digamos 2.
+                // Detetive: rand(0, 3-2). Digamos 1.
+                
+                // Se maxSpecials for 0 (menos de 3 players - não deve ocorrer pelo input), força 1 imp
+                const limit = Math.max(1, maxSpecials);
+                
+                numImpostors = Math.floor(Math.random() * limit) + 1; // 1 a limit
+                
+                // Se o usuário permitiu detetives no caos (vamos assumir que a checkbox detetive conta)
+                // Ou vamos sempre permitir no caos? O prompt diz "quantidade de impostores e detetives aleatórios".
+                // Vamos assumir que pode ter detetive no caos sempre.
+                const remaining = limit - numImpostors;
+                numDetectives = remaining > 0 ? Math.floor(Math.random() * (remaining + 1)) : 0;
+            }
 
-    // Update the countdown function as per the plan
-    function updateCountdown(deadline) {
-        const countdownBanner = document.getElementById('countdownBanner');
-        const daysSection = document.getElementById('daysSection');
-        const countdownTimer = document.getElementById('countdownTimer');
-        
-        function updateTimer() {
-            const now = new Date().getTime();
-            const timeLeft = deadline.getTime() - now;
-            
-            if (timeLeft <= 0) {
-                countdownBanner.style.display = 'none';
-                return;
+            // Gera Array de Roles
+            let roles = [];
+            for(let i=0; i<numImpostors; i++) roles.push('impostor');
+            for(let i=0; i<numDetectives; i++) roles.push('detective');
+            while(roles.length < state.totalPlayers) roles.push('civilian');
+
+            // Embaralha (Fisher-Yates)
+            for (let i = roles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [roles[i], roles[j]] = [roles[j], roles[i]];
             }
+
+            // Seleciona Ícones
+            const currentPair = getUniqueIconPair();
+            const impostorKnows = document.getElementById('impostorKnows').checked;
+
+            // Monta dados dos jogadores
+            state.players = roles.map(role => {
+                let iconClass = '';
+                let iconName = '';
+                let displayName = '';
+                let colorClass = '';
+
+                if (role === 'civilian') {
+                    iconClass = currentPair.c.i;
+                    iconName = currentPair.c.n;
+                    displayName = 'CIVIL';
+                    colorClass = 'civilian-color';
+                } else if (role === 'detective') {
+                    iconClass = 'fa-user-secret'; // Ícone genérico ou nenhum
+                    iconName = '???';
+                    displayName = 'DETETIVE';
+                    colorClass = 'detective-color';
+                } else if (role === 'impostor') {
+                    // Se sabe: vê ícone impostor e nome Impostor.
+                    // Se não sabe: vê ícone impostor mas nome Civil.
+                    iconClass = currentPair.i.i;
+                    iconName = currentPair.i.n; // Nome do objeto real dele
+                    
+                    if (impostorKnows) {
+                        displayName = 'IMPOSTOR';
+                        colorClass = 'impostor-color';
+                    } else {
+                        // O "Truque": Ele acha que é civil
+                        displayName = 'CIVIL'; 
+                        colorClass = 'civilian-color'; 
+                        // Nota: Ele recebe a imagem da estrela, mas dizemos "Civil". 
+                        // Se ele descrever "Tenho uma estrela" e os civis "Tenho um sol", ele é pego.
+                    }
+                }
+
+                return {
+                    role: role, // role real
+                    icon: iconClass,
+                    itemName: iconName,
+                    displayRole: displayName,
+                    color: colorClass
+                };
+            });
+
+            state.currentPlayerIndex = 0;
             
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            // Troca Tela
+            document.getElementById('screen-setup').classList.remove('active');
+            document.getElementById('screen-game').classList.add('active');
+            updateGameScreen();
+        }
+
+        function updateGameScreen() {
+            const pIndex = state.currentPlayerIndex + 1;
+            document.getElementById('round-indicator').innerText = `Jogador ${pIndex} de ${state.totalPlayers}`;
+            document.getElementById('current-player-name').innerText = `Jogador ${pIndex}`;
             
-            // Hide days section if 0 days left
-            if (days === 0) {
-                daysSection.style.display = 'none';
+            // Reseta visualização
+            document.getElementById('view-hidden').style.display = 'flex';
+            document.getElementById('view-revealed').style.display = 'none';
+        }
+
+        function revealCard() {
+            const player = state.players[state.currentPlayerIndex];
+            
+            const iconContainer = document.getElementById('role-icon');
+            const roleName = document.getElementById('role-name');
+            const itemName = document.getElementById('item-name');
+
+            // Limpa classes anteriores
+            iconContainer.className = 'icon-display fa-solid';
+            roleName.className = 'role-text';
+
+            if (player.role === 'detective') {
+                // Detetive não recebe imagem nem dica
+                iconContainer.classList.add('fa-magnifying-glass');
+                iconContainer.style.color = '#FFA500';
+                roleName.innerText = "VOCÊ É O DETETIVE";
+                roleName.classList.add(player.color);
+                itemName.innerText = "Descubra a palavra secreta ouvindo os outros.";
             } else {
-                daysSection.style.display = 'flex';
-                document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                // Update the days label to be singular or plural
-                daysSection.querySelector('.countdown-label').textContent = days === 1 ? 'Dia' : 'Dias';
+                // Civil ou Impostor
+                iconContainer.classList.add(player.icon);
+                // Cor baseada no que ele DEVE ver
+                if (player.displayRole === 'IMPOSTOR') {
+                    iconContainer.style.color = 'var(--secondary)';
+                } else {
+                    iconContainer.style.color = 'var(--accent)';
+                }
+                
+                roleName.innerText = player.displayRole;
+                roleName.classList.add(player.color);
+                itemName.innerText = player.itemName;
             }
-            
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-            
-            // Add urgent styling if less than 1 hour remains
-            if (timeLeft <= 3600000) { // 1 hour in milliseconds
-                countdownTimer.classList.add('countdown-urgent');
+
+            document.getElementById('view-hidden').style.display = 'none';
+            document.getElementById('view-revealed').style.display = 'flex';
+        }
+
+        function hideCard() {
+            state.currentPlayerIndex++;
+            if (state.currentPlayerIndex >= state.totalPlayers) {
+                // Fim da rodada de revelação
+                document.getElementById('screen-game').classList.remove('active');
+                document.getElementById('screen-result').classList.add('active');
             } else {
-                countdownTimer.classList.remove('countdown-urgent');
+                updateGameScreen();
             }
         }
-        
-        // Show the countdown banner
-        countdownBanner.style.display = 'block';
-        
-        // Update immediately and then every second
-        updateTimer();
-        const timerInterval = setInterval(updateTimer, 1000);
-        
-        // Store the interval ID to clear it later if needed
-        countdownBanner.dataset.timerInterval = timerInterval;
-    }
-});
-</script>
-</body></html>
+
+        function returnToMenu() {
+            document.getElementById('screen-result').classList.remove('active');
+            document.getElementById('screen-setup').classList.add('active');
+        }
+
+        // Inicialização
+        validateCounts();
+
+    </script>
+</body>
+</html>
