@@ -473,11 +473,12 @@
             validateCounts();
         }
 
+        // Modificado para permitir 0
         function adjustCount(type, delta) {
             const maxSpecials = Math.floor(state.totalPlayers / 3);
             if (type === 'impostors') {
                 let newVal = state.impostors + delta;
-                if (newVal < 1) newVal = 1;
+                if (newVal < 0) newVal = 0; // Alterado de 1 para 0
                 if (newVal + state.detectives <= maxSpecials) state.impostors = newVal;
             } else if (type === 'detectives') {
                 let newVal = state.detectives + delta;
@@ -489,14 +490,19 @@
             validateCounts();
         }
 
+        // Modificado para remover a trava que forçava mínimo de 1 impostor
         function validateCounts() {
             const maxSpecials = Math.floor(state.totalPlayers / 3);
             document.getElementById('rule-msg').innerText = `Máx. Especiais (Imp+Det): ${maxSpecials}`;
             
-            if (!chaosModeInput.checked && (state.impostors + state.detectives > maxSpecials)) {
-                state.detectives = 0;
-                state.impostors = Math.max(1, maxSpecials);
-                if(state.impostors > maxSpecials) state.impostors = 1;
+            if (!chaosModeInput.checked) {
+                // Se exceder o limite, ajusta apenas o excesso, sem forçar mínimo de 1
+                if (state.impostors + state.detectives > maxSpecials) {
+                    if (state.detectives > maxSpecials) state.detectives = maxSpecials;
+                    if (state.impostors + state.detectives > maxSpecials) {
+                        state.impostors = Math.max(0, maxSpecials - state.detectives);
+                    }
+                }
                 document.getElementById('impostorsVal').innerText = state.impostors;
                 document.getElementById('detectivesVal').innerText = state.detectives;
             }
@@ -509,6 +515,8 @@
             let numDetectives = state.detectives;
 
             if (chaosModeInput.checked) {
+                // No modo Caos, ainda mantive aleatoriedade de 1 a Max, 
+                // para garantir que "algo aconteça", mas você pode pedir para mudar se quiser.
                 const limit = Math.max(1, maxSpecials);
                 numImpostors = Math.floor(Math.random() * limit) + 1;
                 const remaining = limit - numImpostors;
@@ -585,13 +593,10 @@
 
         // Função Genérica para mostrar a carta (usada no jogo e no modal)
         function renderCardData(player, prefix="") {
-            // Se prefix for vazio, busca IDs: role-icon, role-name, item-name
-            // Se prefix for 'review-', busca IDs: review-role-icon, review-role-name, review-item-name
-            
             const icon = document.getElementById(prefix + 'role-icon');
             const name = document.getElementById(prefix + 'role-name');
             const item = document.getElementById(prefix + 'item-name');
-            const instr = document.getElementById('memory-instruction'); // Só existe na tela principal
+            const instr = document.getElementById('memory-instruction');
 
             icon.className = 'icon-display fa-solid ' + player.icon;
             icon.style.color = (player.displayRole === 'IMPOSTOR') ? 'var(--secondary)' : 
@@ -606,7 +611,7 @@
 
         function revealCard() {
             const player = state.players[state.currentPlayerIndex];
-            renderCardData(player); // Prefixo vazio
+            renderCardData(player); 
             document.getElementById('view-hidden').style.display = 'none';
             document.getElementById('view-revealed').style.display = 'flex';
         }
@@ -630,7 +635,6 @@
             switchScreen('screen-setup');
         }
 
-        // Feature 4: Prova Real (Histórico corrigido para Português)
         function toggleHistory() {
             const box = document.getElementById('history-box');
             if (box.style.display === 'block') {
@@ -662,7 +666,6 @@
             box.style.display = 'block';
         }
 
-        // Feature 5: Espiar (Modal Corrigido)
         function openReviewModal() {
             const grid = document.getElementById('review-grid');
             grid.innerHTML = '';
@@ -683,10 +686,7 @@
         function showReviewCard(idx) {
             const player = state.players[idx];
             document.getElementById('review-grid').style.display = 'none';
-            
-            // Aqui enviamos o prefixo 'review-' para preencher os IDs do Modal
             renderCardData(player, 'review-'); 
-            
             document.getElementById('review-card').style.display = 'flex';
         }
 
